@@ -6,7 +6,7 @@ function get_info( $info )
 	{
 		case "engine_version":
 		{
-			$output = "1.0.0";
+			$output = "1.0.1";
 			break;
 		}
 		case "max_file_size":
@@ -16,7 +16,7 @@ function get_info( $info )
 		}
 		case "title":
 		{
-			$output = "ZiGGi Image Host";
+			$output = "ZImage Host";
 			break;
 		}
 		case "charset":
@@ -26,12 +26,12 @@ function get_info( $info )
 		}
 		case "description":
 		{
-			$output = "ZiGGi Image hosting";
+			$output = "ZImage hosting";
 			break;
 		}
 		case "keywords":
 		{
-			$output = "image host";
+			$output = "image host,zimage host";
 			break;
 		}
 		case "themename":
