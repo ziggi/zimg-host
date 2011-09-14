@@ -4,6 +4,39 @@ include "functions.php";
 
 global $errors;
 
+
+if(!empty($_GET['image']))
+{
+	// уберём из имени все символы, кроме тех, которые являются результатом хеша md5
+	$file_name = preg_replace("/[^a-zA-Z0-9]/u","",$_GET['image']);
+	$file_location = glob("files/".$file_name.".*");
+	
+	if(empty($file_location) || !file_exists($file_location[0]))
+	{
+		load_theme_module("index.php");
+		exit;
+	}
+	
+	$file_type = substr(strrchr($file_location[0], '.'), 1);
+	$img = get_info("siteurl")."files/".$file_name.".".$file_type;
+	$thumb_link = get_info("siteurl")."files/".$file_name."t.".$file_type;
+	
+	$errors .= "
+	<div class='image_load'>
+		<a href=\"$img\" target=\"_blank\"><img src=\"$thumb_link\"></a><br>
+		<table class='g_table'>
+			".add_new_tr("Ссылка",$img)."
+			".add_new_tr("Превью с увеличением, BB код","[url=".$img."][img]".$thumb_link."[/img][/url]")."
+			".add_new_tr("Картинка, BB код","[img]".$img."[/img]")."
+			".add_new_tr("Превью с увеличением, HTML код","<a href=\"$img\" target=\"_blank\"><img src=\"$thumb_link\"></a>")."
+			".add_new_tr("Картинка, HTML код","<img src=\"".$img."\">")."
+		</table>
+	</div>
+	";
+	
+	load_theme_module("index.php");
+	exit;
+}
 if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["error"] != 4)
 {
 	// проверим размер
@@ -36,9 +69,8 @@ if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["er
 	}
 	if( is_uploaded_file($_FILES["filename"]["tmp_name"]) )
 	{
-		// изменим имя файла по дате и времени
-		$file_md5salt = md5($_FILES["filename"]["name"].date("dmYHis"));
-		$file_name = substr($file_md5salt,strlen($file_md5salt)/2);
+		// изменим имя файла, приделав к нему дату и захешировав в md5
+		$file_name = md5($_FILES["filename"]["name"].date("dmYHis"));
 		move_uploaded_file($_FILES["filename"]["tmp_name"], "files/".$file_name.".".$file_type);
 		// print link on img
 		$img = get_info("siteurl")."files/".$file_name.".".$file_type;
@@ -95,19 +127,8 @@ if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["er
 				break;
 			}
 		}
-		// выводим
-		$errors .= "
-		<div class='image_load'>
-			<img src='$thumb_link' width='100' height='100'><br>
-			<table class='g_table'>
-				".add_new_tr("Ссылка",$img)."
-				".add_new_tr("Превью с увеличением, BB код","[url=".$img."][img]".$thumb_link."[/img][/url]")."
-				".add_new_tr("Картинка, BB код","[img]".$img."[/img]")."
-				".add_new_tr("Превью с увеличением, HTML код","<a href=\"$img\" target=\"_blank\"><img src=\"$thumb_link\"></a>")."
-				".add_new_tr("Картинка, HTML код","<img src=\"".$img."\">")."
-			</table>
-		</div>
-		";
+		// перекидываем на страницу изображения
+		header("Location: image/$file_name");
 	}
 	else
 	{
