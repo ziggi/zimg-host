@@ -15,7 +15,7 @@
 		<div id='content'>
 			<? global $errors; echo $errors; ?>
 			<br>
-			<form action="?step" method="post" enctype="multipart/form-data">
+			<form action="<? print_info("siteurl") ?>?step" method="post" enctype="multipart/form-data">
 				<input type="file" name="filename" size='40'>
 				<br><br>
 				<input type="submit" value="Загрузить">

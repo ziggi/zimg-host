@@ -6,7 +6,7 @@ function get_info( $info )
 	{
 		case "engine_version":
 		{
-			$output = "1.1.0";
+			$output = "1.1.1";
 			break;
 		}
 		case "max_file_size":
