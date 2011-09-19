@@ -4,17 +4,22 @@ function get_info( $info )
 {
 	switch( $info )
 	{
-		case "engine_version":
+		case "engine_version": // версия скрипта
 		{
-			$output = "1.2.0";
+			$output = "1.2.1";
 			break;
 		}
-		case "max_file_size":
+		case "max_file_size": // максимальный размер одного файла, в мегабайтах
 		{
 			$output = 0.5;
 			break;
 		}
-		case "title":
+		case "max_new_inputs": // максимальное количество создаваемых input type=file
+		{
+			$output = 10;
+			break;
+		}
+		case "title": // текст между <title> и </title>
 		{
 			$output = "ZImage Host";
 			break;
@@ -24,22 +29,22 @@ function get_info( $info )
 			$output = "UTF-8";
 			break;
 		}
-		case "description":
+		case "description": // описание ресурса
 		{
 			$output = "ZImage hosting";
 			break;
 		}
-		case "keywords":
+		case "keywords": // теги
 		{
 			$output = "image host,zimage host";
 			break;
 		}
-		case "themename":
+		case "themename": // название темы, тема должна быть в папке themes/
 		{
 			$output = "standart";
 			break;
 		}
-		case "siteurl":
+		case "siteurl": // url вашего сайта
 		{
 			$output = "http://127.0.0.1/img.ziggi.su/";
 			break;

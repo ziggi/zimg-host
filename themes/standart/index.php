@@ -9,13 +9,15 @@
 	<link rel='stylesheet' type='text/css' href='<? print_info("siteurl") ?>themes/<? print_info("themename") ?>/style.css'>
 	<link rel='shortcut icon' type='image/x-icon' href='<? print_info("siteurl") ?>themes/<? print_info("themename") ?>/images/favicon.ico'>
 	<script>
+	var input_count=0;
 	function addNewInput() {
+		if(input_count >= <?=get_info("max_new_inputs")?>) return;
 		input = document.createElement("input");
 		input.setAttribute("type", "file");
 		input.setAttribute("name", "filename[]");
 		input.setAttribute("size", "40");
-		input.setAttribute("multiple");
 		document.getElementById("new_inputs").appendChild(input);
+		input_count++;
 	}
 	</script>
 </head>
