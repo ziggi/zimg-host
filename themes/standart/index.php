@@ -8,15 +8,27 @@
 	<meta name='keywords' content='<? print_info("keywords") ?>'>
 	<link rel='stylesheet' type='text/css' href='<? print_info("siteurl") ?>themes/<? print_info("themename") ?>/style.css'>
 	<link rel='shortcut icon' type='image/x-icon' href='<? print_info("siteurl") ?>themes/<? print_info("themename") ?>/images/favicon.ico'>
+	<script>
+	function addNewInput() {
+		input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("name", "filename[]");
+		input.setAttribute("size", "40");
+		input.setAttribute("multiple");
+		document.getElementById("new_inputs").appendChild(input);
+	}
+	</script>
 </head>
 
 <body>
-	<div style='width:600px;margin:0 auto;padding-top:150px;'>
+	<div style='width:700px;margin:0 auto;padding:150px 0 150px 0;'>
 		<div id='content'>
-			<? global $errors; echo $errors; ?>
+			<? global $errors; if(!empty($errors)) echo $errors."<br>"; ?>
+			<input type="submit" value="Добавить поле" style='width:100px' onClick='addNewInput()'>
 			<br>
 			<form action="<? print_info("siteurl") ?>?step" method="post" enctype="multipart/form-data">
-				<input type="file" name="filename" size='40'>
+				<input type="file" name="filename[]" size="40" multiple>
+				<div id='new_inputs'></div>
 				<br><br>
 				<input type="submit" value="Загрузить">
 			</form>

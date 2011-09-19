@@ -52,7 +52,7 @@ a:visited {/*для посещённых ссылок*/
 	width:90%;
 	margin:0 auto;
 }
-.image_load input[type='text'] {
+.image_load input[type='text'],textarea {
 	font-size: 12px;
 	color:#FFFFFF;
 	background-color:#555555;
@@ -94,13 +94,10 @@ a:visited {/*для посещённых ссылок*/
 	font-size:11px;
 	font-family:Verdana;
 }
-.textbox {
-	font-size: 12px;
-	color:#FFFFFF;
-	background-color:#555555;
-	border:1px solid #333333;
+textarea {
+	height:50px;
 }
-input[type='text'],[type='password']  {
+input[type='text'],[type='password'],textarea  {
 	width:100%;
 }
 input[type='submit'] {
