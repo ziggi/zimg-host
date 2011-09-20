@@ -93,7 +93,7 @@ if(!empty($_GET['image']))
 if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["error"] != 4)
 {
 	$url_result = "Location: image/";
-	for($i=0;$i<count($_FILES["filename"]);$i++)
+	for($i=0;$i<count($_FILES["filename"]["name"]);$i++)
 	{
 		if(empty($_FILES["filename"]["name"][$i])) continue;
 		// проверим размер

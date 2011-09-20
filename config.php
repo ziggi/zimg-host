@@ -6,7 +6,7 @@ function get_info( $info )
 	{
 		case "engine_version": // версия скрипта
 		{
-			$output = "1.2.1";
+			$output = "1.2.2";
 			break;
 		}
 		case "max_file_size": // максимальный размер одного файла, в мегабайтах
