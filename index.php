@@ -190,9 +190,11 @@ if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["er
 		else
 		{
 			$errors .= "<li>Ошибка загрузки файла</li>";
+			load_theme_module("index.php");
+			exit;
 		}
 	}
-	header( substr($url_result, 0, -1) );
+	header( substr($url_result, 0, strrpos($url_result,",")) );
 }
 
 load_theme_module("index.php");
