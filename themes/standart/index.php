@@ -9,15 +9,26 @@
 	<link rel='stylesheet' type='text/css' href='<? print_info("siteurl") ?>themes/<? print_info("themename") ?>/style.css'>
 	<link rel='shortcut icon' type='image/x-icon' href='<? print_info("siteurl") ?>themes/<? print_info("themename") ?>/images/favicon.ico'>
 	<script>
-	var input_count=0;
-	function addNewInput() {
+	var input_count=1;
+	function addNewInput()
+	{
 		if(input_count >= <?=get_info("max_new_inputs")?>) return;
 		input = document.createElement("input");
 		input.setAttribute("type", "file");
 		input.setAttribute("name", "filename[]");
 		input.setAttribute("size", "40");
-		document.getElementById("new_inputs").appendChild(input);
+		if(input_count == 0)
+		{
+			document.getElementById("inputs").innerHTML = "";
+			input.setAttribute("multiple");
+		}
+		document.getElementById("inputs").appendChild(input);
 		input_count++;
+	}
+	function addTextArea()
+	{
+		input_count=0;
+		document.getElementById("inputs").innerHTML = "<textarea name='file_urls' style='height:100px;width:97%'></textarea>";
 	}
 	</script>
 </head>
@@ -26,17 +37,20 @@
 	<div style='width:700px;margin:0 auto;padding:150px 0 150px 0;'>
 		<div id='content'>
 			<? global $errors; if(!empty($errors)) echo $errors."<br>"; ?>
-			<input type="submit" value="Добавить поле" style='width:100px' onClick='addNewInput()'>
+			<input type="submit" value="Добавить поле" style='width:120px' onClick='addNewInput()'>
+			<input type="submit" value="Загрузить с URL" style='width:120px;float:right;' onClick='addTextArea()'>
 			<br>
 			<form action="<? print_info("siteurl") ?>?step" method="post" enctype="multipart/form-data">
-				<input type="file" name="filename[]" size="40" multiple>
-				<div id='new_inputs'></div>
+				<br>
+				<div id='inputs'>
+					<input type="file" name="filename[]" size="40" multiple>
+				</div>
 				<br><br>
 				<input type="submit" value="Загрузить">
 			</form>
 		</div>
 		<div id='footer'>
-			<div class='text_a' style='text-align:left;float:left;'>v<? print_info("engine_version"); ?></div>
+			<div class='text_a' style='text-align:left;float:left;'><a href='http://ziggi.su/category/developments/zimage-host-developments/' target='_blank'>v<? print_info("engine_version"); ?></a></div>
 			<div class='text_a' style='text-align:right;float:right;'><a href='http://ziggi.su/' target='_blank'>ZiGGi</a></div>
 		</div>
 	</div>

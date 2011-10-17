@@ -1,17 +1,24 @@
 <?
 
+date_default_timezone_set('Europe/Moscow');
+
 function get_info( $info )
 {
 	switch( $info )
 	{
 		case "engine_version": // версия скрипта
 		{
-			$output = "1.2.2";
+			$output = "1.3.0";
 			break;
 		}
 		case "max_file_size": // максимальный размер одного файла, в мегабайтах
 		{
 			$output = 0.5;
+			break;
+		}
+		case "max_upload_files": // максимальное количество загружаемых файлов
+		{
+			$output = 10;
 			break;
 		}
 		case "max_new_inputs": // максимальное количество создаваемых input type=file

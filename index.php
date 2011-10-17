@@ -4,7 +4,6 @@ include "functions.php";
 
 global $errors;
 
-
 if(!empty($_GET['image']))
 {
 	$file_names = explode(",",$_GET['image']);
@@ -89,46 +88,90 @@ if(!empty($_GET['image']))
 	load_theme_module("index.php");
 	exit;
 }
-
-if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["error"] != 4)
+if(isset($_GET['step']) && !empty($_POST['file_urls']))
 {
-	$url_result = "Location: image/";
-	for($i=0;$i<count($_FILES["filename"]["name"]);$i++)
+	$file_urls = preg_replace("/[^a-zA-Zа-яА-Я0-9\n:\.\-_\/]/u","",$_POST['file_urls']);
+	$array["name"] = split("\n",$file_urls);
+	// очистим массив от пустых элементов
+	$array["name"] = array_unset_empty($array["name"]);
+	// обрежем массив до get_info("max_upload_files") элементов
+	if(($count = count($array["name"])) > get_info("max_upload_files")-1)
 	{
-		if(empty($_FILES["filename"]["name"][$i])) continue;
+		$tmp = array_chunk($array["name"],get_info("max_upload_files"));
+		$array["name"] = $tmp[0];
+	}
+	for($i=0;$i<$count;$i++)
+	{
+		$array["tmp_name"][$i] = tempnam("/tmp","php");
+		
+		$content = file_get_contents($array["name"][$i]);
+		if($content == false) continue;
+		$file = fopen($array["tmp_name"][$i], "w");
+		fwrite($file, $content);
+		fclose($file);
+		
+		$array["size"][$i] = filesize($array["tmp_name"][$i]);
+	}
+	load_files($array);
+	exit;
+}
+if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["error"] != 4 && empty($_POST['file_urls']))
+{
+	load_files($_FILES["filename"]);
+	exit;
+}
+
+load_theme_module("index.php");
+
+function add_new_tr($name,$value)
+{
+	return "<tr>
+		<td style='width:200px'>$name:</td>
+		<td style='padding-right:5px;'><input type='text' value='$value' onClick=select() readonly></td>
+	</tr>";
+}
+
+function load_files($files_array)
+{
+	global $errors;
+	$url_result = "Location: image/";
+	// очистим массив от пустых элементов
+	$files_array["name"] = array_unset_empty($files_array["name"]);
+	// обрежем массив до get_info("max_upload_files") элементов
+	if(($count = count($files_array["name"])) > get_info("max_upload_files")-1)
+	{
+		$tmp = array_chunk($array["name"],get_info("max_upload_files"));
+		$files_array["name"] = $tmp[0];
+	}
+	for($i=0;$i<$count;$i++)
+	{
 		// проверим размер
-		if( $_FILES["filename"]["size"][$i] > get_info("max_file_size")*1024*1024 )
+		if( $files_array["size"][$i] > get_info("max_file_size")*1024*1024 )
 		{
-			$errors .= "<li>Размер файла превышает ".get_info("max_file_size")." мегабайт</li>";
-			load_theme_module("index.php");
-			return;
+			$errors .= "<li>Размер файла `".$files_array["name"][$i]."` превышает ".get_info("max_file_size")." мегабайт</li>";
+			continue;
 		}
-		// вытащим тип файла
-		if( ($pos = strpos($_FILES["filename"]["type"][$i],"/")) == false )
-		{
-			$errors .= "<li>Неверный тип файла</li>";
-			return;
-		}
+		// извлекём тип файла
+		$file_type = strtolower(array_pop(explode('.',$files_array["name"][$i])));
 		// отсечём неподдерживаемые типы
-		$file_type = substr($_FILES["filename"]["type"][$i],$pos+1);
 		switch( $file_type )
 		{
 			case "jpeg": break;
+			case "jpg": break;
 			case "png": break;
 			case "gif": break;
 			case "bmp": break;
 			default:
 			{
 				$errors .= "<li>Неверный тип файла</li>";
-				load_theme_module("index.php");
-				exit;
+				return;
 			}
 		}
-		if( is_uploaded_file($_FILES["filename"]["tmp_name"][$i]) )
+		if( file_exists($files_array["tmp_name"][$i]) )
 		{
 			// изменим имя файла, приделав к нему дату и захешировав в md5
-			$file_name = md5($_FILES["filename"]["name"][$i].date("dmYHis"));
-			move_uploaded_file($_FILES["filename"]["tmp_name"][$i], "files/".$file_name.".".$file_type);
+			$file_name = md5($files_array["name"][$i].date("dmYHis"));
+			rename($files_array["tmp_name"][$i], "files/".$file_name.".".$file_type);
 			// print link on img
 			$img = get_info("siteurl")."files/".$file_name.".".$file_type;
 			// параметры уменьшенной картинки
@@ -140,6 +183,17 @@ if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["er
 			switch( $file_type )
 			{
 				case "jpeg":
+				{
+					$source = imagecreatefromjpeg($img);
+					imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+					// приделываем плюс
+					$plus_source = imagecreatefrompng("plus.png");
+					imagecopy($thumb, $plus_source, 90, 90, 0, 0, 10, 10);
+					// сохраняем итог в файл
+					imagejpeg($thumb,"files/".$file_name."t.".$file_type);
+					break;
+				}
+				case "jpg":
 				{
 					$source = imagecreatefromjpeg($img);
 					imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
@@ -190,20 +244,21 @@ if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["er
 		else
 		{
 			$errors .= "<li>Ошибка загрузки файла</li>";
-			load_theme_module("index.php");
-			exit;
+			return;
 		}
 	}
 	header( substr($url_result, 0, strrpos($url_result,",")) );
 }
 
-load_theme_module("index.php");
-
-function add_new_tr($name,$value)
+function array_unset_empty($array)
 {
-	return "<tr>
-		<td style='width:200px'>$name:</td>
-		<td style='padding-right:5px;'><input type='text' value='$value' onClick=select() readonly></td>
-	</tr>";
+	$ret_arr = array();
+	foreach($array as $val)
+	{
+		if(empty($val)) continue;
+		$ret_arr[] = $val;
+	}
+	return $ret_arr;
 }
+
 ?>
