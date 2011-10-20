@@ -20,7 +20,7 @@
 		if(input_count == 0)
 		{
 			document.getElementById("inputs").innerHTML = "";
-			input.setAttribute("multiple");
+			input.setAttribute("multiple","multiple");
 		}
 		document.getElementById("inputs").appendChild(input);
 		input_count++;
