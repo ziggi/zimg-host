@@ -115,7 +115,7 @@ if(isset($_GET['step']) && !empty($_POST['file_urls']))
 	load_files($array);
 	exit;
 }
-if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["error"] != 4 && empty($_POST['file_urls']))
+if(isset($_GET['step']) && isset($_FILES["filename"]) && $_FILES["filename"]["error"][0] != 4 && empty($_POST['file_urls']))
 {
 	load_files($_FILES["filename"]);
 	exit;
