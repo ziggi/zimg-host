@@ -27,7 +27,7 @@ $site['version'] = '2.0';
 <div id="middle">
   <div id="content">
     <ul class="btn-list">
-      <li><button class="btn pull-left">Upload file</button></li>
+      <li><button class="btn pull-left">Upload from disc</button></li>
       <li><button class="btn pull-right">Upload from URL</button></li>
     </ul>
   </div>
