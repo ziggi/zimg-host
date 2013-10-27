@@ -1,5 +1,0 @@
-AddDefaultCharset UTF-8
-RewriteEngine on
-Options +FollowSymlinks
-Options -Indexes
-RewriteRule ^(.*)image/(.*)$ $1index.php?image=$2
