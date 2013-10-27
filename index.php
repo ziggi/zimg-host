@@ -27,11 +27,24 @@ $site['version'] = '2.0';
 <div id="middle">
   <div id="content">
     <ul class="btn-list">
-      <li><button class="btn pull-left">Upload from disc</button></li>
-      <li><button class="btn pull-right">Upload from URL</button></li>
+      <li>
+      	<button class="btn pull-left" id="btn-disc">Upload from disc</button>
+
+		<form id="form-input" method="post" enctype="multipart/form-data" action="script.php">
+		  <input type="file" name="files[]" id="file-input" multiple>
+		</form>
+
+      </li>
+      <li><button class="btn pull-right" id="btn-url">Upload from URL</button></li>
     </ul>
+    <div id="file-list">
+    </div>
   </div>
 </div>
+
+<script type='text/javascript' src='js/jquery-2.0.3.min.js'></script>
+<script type='text/javascript' src='js/jquery.form.min.js'></script>
+<script type='text/javascript' src='js/scripts.js'></script>
 
 </body>
 

@@ -57,6 +57,10 @@ body {
 	padding: 0 3px 0 3px;
 }
 
+#file-input {
+	display: none;
+}
+
 @media only screen and (max-width: 480px) {
 	#middle {
 		width: 100%;
