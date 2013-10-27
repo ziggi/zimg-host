@@ -63,6 +63,9 @@ body {
 		height: 70%;
 		margin: 25px 0 25px 0;
 	}
+	button.btn {
+		font-size: 11px;
+	}
 }
 
 .pull-left {
