@@ -29,13 +29,25 @@ $site['version'] = '2.0';
     <ul class="btn-list">
       <li>
         <button class="btn pull-left" id="btn-disc">Upload from disc</button>
-        <form id="form-input" method="post" enctype="multipart/form-data" action="script.php">
+        <form id="form-input" method="post" enctype="multipart/form-data" action="upload.php">
           <input type="file" name="files[]" id="file-input" multiple>
         </form>
       </li>
       <li><button class="btn pull-right" id="btn-url">Upload from URL</button></li>
     </ul>
     <div id="file-list">
+      <div class="file-item">
+        <p><a href="http://127.0.0.1/img.ziggi.org/file/7af7ebdcc5620775c663e1e3a0d8df51.png" target="_blank"><img src="http://127.0.0.1/img.ziggi.org/file/7af7ebdcc5620775c663e1e3a0d8df51.png"></a></p>
+        <table>
+          <tbody>
+            <tr><td>Изображение</td><td><input type="text" value="http://127.0.0.1/img.ziggi.org/file/7af7ebdcc5620775c663e1e3a0d8df51.png"></td></tr>
+            <tr><td>Превью с увеличением, BB код</td><td><input type="text" value="http://127.0.0.1/img.ziggi.org/file/7af7ebdcc5620775c663e1e3a0d8df51.png"></td></tr>
+            <tr><td>Картинка, BB код</td><td><input type="text" value="http://127.0.0.1/img.ziggi.org/file/7af7ebdcc5620775c663e1e3a0d8df51.png"></td></tr>
+            <tr><td>Превью с увеличением, HTML код</td><td><input type="text" value="http://127.0.0.1/img.ziggi.org/file/7af7ebdcc5620775c663e1e3a0d8df51.png"></td></tr>
+            <tr><td>Картинка, HTML код</td><td><input type="text" value="http://127.0.0.1/img.ziggi.org/file/7af7ebdcc5620775c663e1e3a0d8df51.png"></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
