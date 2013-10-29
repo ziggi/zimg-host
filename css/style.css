@@ -65,9 +65,17 @@ body {
 	padding: 10px 2px 0 2px;
 }
 
+.file-item {
+	padding-top: 10px;
+}
+
 .file-item p {
 	margin: 0;
 	text-align: center;
+}
+
+.file-item img {
+	max-width: 258px;
 }
 
 .file-item table {

@@ -34,17 +34,16 @@ class Upload {
 			}
 
 			if (!isset($this->_allowed_types[ $this->_files[$i]['type'] ])) {
+				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['type'] = 1;
-			}
-
-			if ($this->_files[$i]['size'] > 999999) {
-				$array_result[$i]['error']['size'] = 1;
-			}
-
-			if ($array_result[$i]['error']['type'] == 1 || $array_result[$i]['error']['size'] == 1) {
 				continue;
 			}
 
+			if ($this->_files[$i]['size'] > 999999) {
+				$array_result[$i]['error']['upload'] = 1;
+				$array_result[$i]['error']['size'] = 1;
+				continue;
+			}
 
 			$new_name = md5(microtime() . $this->_files[$i]['name'] . $this->_files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[ $this->_files[$i]['type'] ];
 			move_uploaded_file($this->_files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
