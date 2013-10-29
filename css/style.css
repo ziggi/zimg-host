@@ -61,6 +61,37 @@ body {
 	display: none;
 }
 
+#file-list {
+	padding: 10px 2px 0 2px;
+}
+
+.file-item p {
+	margin: 0;
+	text-align: center;
+}
+
+.file-item table {
+	width: 100%;
+	font-size: 12px;
+	border-collapse: collapse;
+}
+
+.file-item table td {
+}
+
+.file-item table td:nth-child(1) {
+	text-align: right;
+	width: 40%;
+	padding: 1px;
+}
+
+.file-item input {
+	width: 100%;
+	background: #aaa;
+	border: 1px solid #6d6d6d;
+	padding: 1px;
+}
+
 @media only screen and (max-width: 480px) {
 	#middle {
 		width: 100%;
