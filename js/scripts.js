@@ -6,6 +6,12 @@ $(window).load(function () {
 
 	$('#file-input').on('change', function () {
 		$('#form-input').ajaxForm({
+			beforeSend: function() {
+				// TODO: create 0% progress bar's
+			},
+			uploadProgress: function(event, position, total, percentComplete) {
+				// TODO: usage percentComplete for showing upload progress
+			},
 			complete: function(xhr) {
 				var result = JSON.parse(xhr.responseText);
 
