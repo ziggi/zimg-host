@@ -38,6 +38,8 @@ $site['version'] = '2.0';
     <div id="file-list">
     </div>
   </div>
+  <div id="bottom">
+  </div>
 </div>
 
 <script type='text/javascript' src='js/jquery-2.0.3.min.js'></script>
