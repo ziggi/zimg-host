@@ -66,11 +66,11 @@ body {
 }
 
 #file-list {
-	padding: 10px 2px 0 2px;
+	padding: 0px 2px 0 2px;
 }
 
 .file-item {
-	padding-top: 10px;
+	padding-top: 35px;
 }
 
 .file-item p {
@@ -82,26 +82,30 @@ body {
 	max-width: 258px;
 }
 
-.file-item table {
-	width: 100%;
-	font-size: 12px;
-	border-collapse: collapse;
-}
-
-.file-item table td {
-}
-
-.file-item table td:nth-child(1) {
-	text-align: right;
-	width: 40%;
-	padding: 1px;
-}
-
 .file-item input {
-	width: 100%;
-	background: #aaa;
-	border: 1px solid #6d6d6d;
-	padding: 1px;
+	width: 220px;
+	padding: 3px;
+	outline: none;
+	color: #bbb;
+	background: #3a3a3a;
+	border: 1px solid #202020;
+	border-radius: 3px;
+	-webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	   -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	     -o-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.file-links h2 {
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	font-weight: bold;
+	color: #111;
+}
+
+.file-links .row {
+	padding-top: 3px;
 }
 
 @media only screen and (max-width: 480px) {
@@ -121,6 +125,10 @@ body {
 
 .pull-right {
 	float: right;
+}
+
+.clear {
+	clear: both;
 }
 
 .btn-list {
