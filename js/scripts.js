@@ -1,5 +1,21 @@
 $(function(){
 
+	$('#btn-url').on('click', function () {
+		$('#overlay').fadeIn(150);
+		$('#url-menu').fadeIn(150);
+		$('#url-menu textarea').focus();
+	});
+
+	$('#btn-url-clear').on('click', function () {
+		$('#url-menu textarea').val('');
+		$('#url-menu textarea').focus();
+	});
+
+	$('#btn-url-close').on('click', function () {
+		$('#overlay').fadeOut(150);
+		$('#url-menu').fadeOut(150);
+	});
+
 	$('#btn-disc').on('click', function () {
 		$('#file-input').click();
 	});
