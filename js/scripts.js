@@ -41,18 +41,17 @@ $(function(){
 					if (result[i].error.upload == 1) {
 						var errorTypeText;
 
-						if (result[i].error.upload.type == 1 && result[i].error.upload.size == 1) {
+						if (result[i].error.type == 1 && result[i].error.size == 1) {
 							errorTypeText = 'Type and size error.';
-						} else if (result[i].error.upload.type == 1) {
+						} else if (result[i].error.type == 1) {
 							errorTypeText = 'Type error.';
-						} else if (result[i].error.upload.size == 1) {
+						} else if (result[i].error.size == 1) {
 							errorTypeText = 'Size error.';
 						} else {
 							errorTypeText = 'Server error.';
 						}
-						
+
 						$.get('file_item_error.php', {name: fileName, error: errorTypeText}, function(data) {
-							console.log(data);
 							$('#file-list').append(data);
 						});
 
@@ -62,7 +61,6 @@ $(function(){
 					var fileUrl = window.location + 'file/' + result[i].url;
 
 					$.get('file_item.php', {url: fileUrl, name: fileName}, function(data) {
-							console.log(data);
 						$('#file-list').append(data);
 					});
 				}
