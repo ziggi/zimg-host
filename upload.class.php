@@ -39,7 +39,7 @@ class Upload {
 				continue;
 			}
 
-			if ($this->_files[$i]['size'] > 999999) {
+			if ($this->_files[$i]['size'] > 2 * 1024 * 1024) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['size'] = 1;
 				continue;
@@ -51,7 +51,6 @@ class Upload {
 			$array_result[$i]['url'] = $new_name;
 		}
 		echo json_encode($array_result);
-		//print_r($array_result);
 	}
 
 	public function restruct_input_array($files_array) {

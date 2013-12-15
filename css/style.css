@@ -164,6 +164,42 @@ body {
 	padding-top: 3px;
 }
 
+.progress {
+	display: none;
+	padding: 14px 2px 0 2px;
+}
+
+.file-progress {
+	display: inline-block;
+	height: 20px;
+	width: 100%;
+	border: 1px solid #202020;
+	border-radius: 3px;
+	-webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	   -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	     -o-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.file-progress-percent {
+	position: absolute;
+	left: 48%;
+	margin-top: -20px;
+	line-height: 22px;
+	height: 20px;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 1px 1px 2px black, 0 0 1px #000;
+	color: #bbb;
+}
+
+.file-progress-bar {
+	height: 20px;
+	width: 20%;
+	background: #4a4a4a;
+	border-radius: 1px;
+}
+
 @media only screen and (max-width: 480px) {
 	#middle {
 		width: 100%;

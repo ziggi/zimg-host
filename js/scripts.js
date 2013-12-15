@@ -23,11 +23,15 @@ $(function(){
 	$('#file-input').on('change', function () {
 		$('#form-input').ajaxForm({
 			beforeSend: function() {
-				// TODO: create 0% progress bar's
+				$('.progress').css('display', 'block');
+				updatePercentValue(0);
 			},
 			uploadProgress: function(event, position, total, percentComplete) {
-				// TODO: usage percentComplete for showing upload progress
+				updatePercentValue(percentComplete);
 			},
+		    success: function() {
+		    	updatePercentValue(100);
+		    },
 			complete: function(xhr) {
 				var result = JSON.parse(xhr.responseText);
 
@@ -46,39 +50,28 @@ $(function(){
 						} else {
 							errorTypeText = 'Server error.';
 						}
-
-						$.get('file_item_error.html', function(data) {
-							var content = $('<div>').html(data);
-							content.find('p').html('File ' + fileName + ' has been not uploaded. ' + errorTypeText);
-							$('#file-list').append(content.html());
+						
+						$.get('file_item_error.php', {name: fileName, error: errorTypeText}, function(data) {
+							console.log(data);
+							$('#file-list').append(data);
 						});
 
 						continue;
 					}
 
-					var url = window.location + 'file/' + result[i].url;
+					var fileUrl = window.location + 'file/' + result[i].url;
 
-					$.get('file_item.html', function(data) {
-						var content = $('<div>').html(data);
-
-						content.find('.link').attr('value', url);
-
-						content.find('a.direct_link').attr('href', url);
-						content.find('input.direct_link').attr('value', url);
-
-						content.find('.img_small').attr('src', url);
-
-						content.find('.bb_pwi').attr('value', '[url=' + url + '][img]' + url + '[/img][/url]');
-						content.find('.bb_image').attr('value', '[img]' + url + '[/img]');
-
-						content.find('.html_pwi').attr('value', '<a href="' + url + '" target="_blank"><img src"' + url + '" attr="' + name + '"></a>');
-						content.find('.html_image').attr('value', '<img src"' + url + '" attr="' + fileName + '">');
-
-						$('#file-list').append(content.html());
+					$.get('file_item.php', {url: fileUrl, name: fileName}, function(data) {
+							console.log(data);
+						$('#file-list').append(data);
 					});
 				}
 			}
 		}).submit();
 	});
 	
+	function updatePercentValue(percent) {
+		$('.file-progress-bar').css('width', percent + '%');
+		$('.file-progress-percent').html(percent + '%');
+	}
 });

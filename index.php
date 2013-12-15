@@ -39,6 +39,12 @@ $site['version'] = '2.0';
         <button class="btn pull-right" id="btn-url">Upload from URL</button>
       </li>
     </ul>
+    <div class="progress">
+      <div class="file-progress">
+        <div class="file-progress-bar"></div>
+        <div class="file-progress-percent">0%</div>
+      </div>
+    </div>
     <div id="file-list">
     </div>
   </div>
