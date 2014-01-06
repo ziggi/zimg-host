@@ -54,7 +54,7 @@ $site['version'] = '2.0';
 
 <div id="url-menu">
   <h2>Paste URL's here</h2>
-  <textarea></textarea>
+  <textarea id="url-input"></textarea>
   <button class="btn pull-left" id="btn-url-clear">Clear</button>
   <button class="btn pull-right" id="btn-url-upload">Upload</button>
   <button class="btn pull-right" id="btn-url-close">Close</button>
