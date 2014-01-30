@@ -39,13 +39,13 @@ $name = $_GET['name'];
       <div class="pull-left">
         <h2>Preview with increasing [HTML]</h2>
         <div>
-          <input type="text" class="html_pwi" onclick="select()" readonly value='<a href="<?=$url?>" target="_blank"><img src"<?=$url?>" attr="<?=$name?>"></a>'>
+          <input type="text" class="html_pwi" onclick="select()" readonly value='<a href="<?=$url?>" target="_blank"><img src="<?=$url?>" attr="<?=$name?>"></a>'>
         </div>
       </div>
       <div class="pull-right">
         <h2>Image [HTML]</h2>
         <div>
-          <input type="text" class="html_image" onclick="select()" readonly value='<img src"<?=$url?>" attr="<?=$name?>">'>
+          <input type="text" class="html_image" onclick="select()" readonly value='<img src="<?=$url?>" attr="<?=$name?>">'>
         </div>
       </div>
       <div class="clear"></div>
