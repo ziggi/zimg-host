@@ -26,7 +26,6 @@ class Upload {
 
 			if (!$is_copied) {
 				$array_result[$i]['error']['upload'] = 1;
-				continue;
 			}
 
 
@@ -36,7 +35,6 @@ class Upload {
 			if (!$this->is_support_type($array_result[$i]['type'])) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['type'] = 1;
-				continue;
 			}
 
 
@@ -45,9 +43,11 @@ class Upload {
 			if (!$this->is_support_size($array_result[$i]['size'])) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['size'] = 1;
-				continue;
 			}
 
+			if ($array_result[$i]['error']['upload'] == 1) {
+				continue;
+			}
 
 			$new_name = md5(microtime() . $urls_array[$i] . rand(0, 9999)) . '.' . $this->_allowed_types[ $array_result[$i]['type'] ];
 			copy($temp_name, __DIR__ . '/file/' . $new_name);
@@ -74,18 +74,19 @@ class Upload {
 
 			if ($files[$i]['error'] === 1) {
 				$array_result[$i]['error']['upload'] = 1;
-				continue;
 			}
 
-			if (!$this->is_support_size($files[$i]['type'])) {
+			if (!$this->is_support_type($files[$i]['type'])) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['type'] = 1;
-				continue;
 			}
 
 			if (!$this->is_support_size($files[$i]['size'])) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['size'] = 1;
+			}
+
+			if ($array_result[$i]['error']['upload'] == 1) {
 				continue;
 			}
 

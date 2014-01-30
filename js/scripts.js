@@ -68,6 +68,8 @@ $(function(){
 					errorTypeText = 'Server error.';
 				}
 
+				console.log(result[i].error);
+
 				$.get('file_item_error.php', {name: fileName, error: errorTypeText}, function(data) {
 					$('#file-list').append(data);
 				});
