@@ -60,7 +60,7 @@ $site['version'] = '2.0';
   <button class="btn pull-right" id="btn-url-close">Close</button>
 </div>
 
-<script type='text/javascript' src='js/jquery-2.0.3.min.js'></script>
+<script type='text/javascript' src='js/jquery-2.1.0.min.js'></script>
 <script type='text/javascript' src='js/jquery.form.min.js'></script>
 <script type='text/javascript' src='js/scripts.js'></script>
 
