@@ -1,9 +1,10 @@
 <?php
 $url = $_GET['url'];
 $name = $_GET['name'];
+$size = $_GET['size'];
 ?>
 <div class="file-item">
-  <p><a class="direct_link" href="<?=$url?>" target="_blank"><img class="img_small" src="<?=$url?>"></a></p>
+  <p><a class="direct_link" href="<?=$url?>" target="_blank"><img title='<?=$size[3]?>' class="img_small" src="<?=$url?>"></a></p>
   <div class="file-links">
     <div class="row">
       <div class="pull-left">
