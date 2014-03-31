@@ -54,7 +54,6 @@ $(function(){
 
 		for (var i = 0; i < result.length; i++) {
 			var fileName = result[i].name;
-			var fileSize = result[i].size;
 
 			if (result[i].error.upload == 1) {
 				var errorTypeText;
@@ -77,6 +76,7 @@ $(function(){
 			}
 
 			var fileUrl = window.location + 'file/' + result[i].url;
+			var fileSize = result[i].size;
 
 			$.get('file_item.php', {url: fileUrl, name: fileName, size: fileSize}, function(data) {
 				$('#file-list').append(data);

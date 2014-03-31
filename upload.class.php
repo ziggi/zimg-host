@@ -31,7 +31,8 @@ class Upload {
 
 			$img_size = getimagesize($temp_name);
 			$array_result[$i]['type'] = $img_size['mime'];
-			$array_result[$i]['size'] = $img_size;
+			$array_result[$i]['size']['width'] = $img_size[0];
+			$array_result[$i]['size']['height'] = $img_size[1];
 
 			if (!$this->is_support_type($array_result[$i]['type'])) {
 				$array_result[$i]['error']['upload'] = 1;
@@ -39,9 +40,9 @@ class Upload {
 			}
 
 
-			$array_result[$i]['size'] = filesize($temp_name);
+			$array_result[$i]['size']['filesize'] = filesize($temp_name);
 
-			if (!$this->is_support_size($array_result[$i]['size'])) {
+			if (!$this->is_support_size($array_result[$i]['size']['filesize'])) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['size'] = 1;
 			}
@@ -67,8 +68,13 @@ class Upload {
 
 		for ($i = 0; $i < $files_count; $i++) {
 			$array_result[$i]['name'] = $files[$i]['name'];
-			$array_result[$i]['size'] = $files[$i]['size'];
 			$array_result[$i]['type'] = $files[$i]['type'];
+
+			list($width, $height) = getimagesize($files[$i]['tmp_name']);
+			$array_result[$i]['size']['width'] = $width;
+			$array_result[$i]['size']['height'] = $height;
+			$array_result[$i]['size']['filesize'] = $files[$i]['size'];
+
 			$array_result[$i]['error']['upload'] = 0;
 			$array_result[$i]['error']['type'] = 0;
 			$array_result[$i]['error']['size'] = 0;
@@ -95,8 +101,6 @@ class Upload {
 			move_uploaded_file($files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
 
 			$array_result[$i]['url'] = $new_name;
-			$img_size = getimagesize( __DIR__ . '/file/' . $new_name);
-			$array_result[$i]['size'] = $img_size;
 		}
 		echo json_encode($array_result);
 	}

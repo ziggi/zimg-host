@@ -1,10 +1,16 @@
 <?php
 $url = $_GET['url'];
 $name = $_GET['name'];
-$size = $_GET['size'];
+$width = $_GET['size']['width'];
+$height = $_GET['size']['height'];
+$filesize = round($_GET['size']['filesize'] / 1024, 2);
 ?>
 <div class="file-item">
-  <p><a class="direct_link" href="<?=$url?>" target="_blank"><img title='<?=$size[3]?>' class="img_small" src="<?=$url?>"></a></p>
+  <p>
+    <a class="direct_link" href="<?=$url?>" target="_blank">
+      <img title='Width: <?=$width?>px&#013;Height: <?=$height?>px&#013;Filesize: <?=$filesize?> KiB' class="img_small" src="<?=$url?>">
+    </a>
+  </p>
   <div class="file-links">
     <div class="row">
       <div class="pull-left">
