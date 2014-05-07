@@ -133,7 +133,7 @@ body {
 }
 
 .file-item {
-	padding-top: 35px;
+	padding-top: 25px;
 }
 
 .file-item p {
@@ -142,7 +142,7 @@ body {
 }
 
 .file-item img {
-	max-width: 258px;
+	max-width: 420px;
 }
 
 .file-item input {
