@@ -28,10 +28,10 @@ class Upload {
 			}
 
 
-			$img_size = getimagesize($temp_name);
-			$array_result[$i]['type'] = $img_size[2];
-			$array_result[$i]['size']['width'] = $img_size[0];
-			$array_result[$i]['size']['height'] = $img_size[1];
+			list($width, $height, $type) = getimagesize($temp_name);
+			$array_result[$i]['type'] = $type;
+			$array_result[$i]['size']['width'] = $width;
+			$array_result[$i]['size']['height'] = $height;
 
 			if (!$this->is_support_type($array_result[$i]['type'])) {
 				$array_result[$i]['error']['upload'] = 1;
