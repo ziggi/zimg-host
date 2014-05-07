@@ -1,4 +1,5 @@
 $(function(){
+	var appLocation = window.location;
 
 	$('#btn-url').on('click', function() {
 		$('#overlay').fadeIn(150);
@@ -75,10 +76,11 @@ $(function(){
 				continue;
 			}
 
-			var fileUrl = window.location + 'file/' + result[i].url;
+			var fileUrl = appLocation + 'file/' + result[i].url;
+			var fileThumbnailUrl = appLocation + 'file/thumbnail/' + result[i].url;
 			var fileSize = result[i].size;
 
-			$.get('file_item.php', {url: fileUrl, name: fileName, size: fileSize}, function(data) {
+			$.get('file_item.php', {url: fileUrl, thumbUrl: fileThumbnailUrl, name: fileName, size: fileSize}, function(data) {
 				$('#file-list').append(data);
 			});
 		}

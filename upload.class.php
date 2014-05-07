@@ -2,11 +2,10 @@
 
 class Upload {
 	private $_allowed_types = array(
-			'image/png' => 'png',
-			'image/jpeg' => 'jpg',
-			'image/jpg' => 'jpg',
-			'image/bmp' => 'bmp',
-			'image/gif' => 'gif',
+			IMAGETYPE_GIF  => array('function_postfix' => 'gif',  'file_format' => 'gif'),
+			IMAGETYPE_JPEG => array('function_postfix' => 'jpeg', 'file_format' => 'jpg'),
+			IMAGETYPE_PNG  => array('function_postfix' => 'png',  'file_format' => 'png'),
+			IMAGETYPE_BMP  => array('function_postfix' => 'wbmp', 'file_format' => 'bmp'),
 		);
 
 	public function upload_urls($urls_array) {
@@ -30,7 +29,7 @@ class Upload {
 
 
 			$img_size = getimagesize($temp_name);
-			$array_result[$i]['type'] = $img_size['mime'];
+			$array_result[$i]['type'] = $img_size[2];
 			$array_result[$i]['size']['width'] = $img_size[0];
 			$array_result[$i]['size']['height'] = $img_size[1];
 
@@ -51,9 +50,11 @@ class Upload {
 				continue;
 			}
 
-			$new_name = md5(microtime() . $urls_array[$i] . rand(0, 9999)) . '.' . $this->_allowed_types[ $array_result[$i]['type'] ];
+			$new_name = md5(microtime() . $urls_array[$i] . rand(0, 9999)) . '.' . $this->_allowed_types[ $array_result[$i]['type'] ]['file_format'];
 			copy($temp_name, __DIR__ . '/file/' . $new_name);
 			unlink($temp_name);
+
+			$this->image_resize(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
 
 			$array_result[$i]['url'] = $new_name;
 		}
@@ -68,9 +69,9 @@ class Upload {
 
 		for ($i = 0; $i < $files_count; $i++) {
 			$array_result[$i]['name'] = $files[$i]['name'];
-			$array_result[$i]['type'] = $files[$i]['type'];
 
-			list($width, $height) = getimagesize($files[$i]['tmp_name']);
+			list($width, $height, $type) = getimagesize($files[$i]['tmp_name']);
+			$array_result[$i]['type'] = $type;
 			$array_result[$i]['size']['width'] = $width;
 			$array_result[$i]['size']['height'] = $height;
 			$array_result[$i]['size']['filesize'] = $files[$i]['size'];
@@ -83,7 +84,7 @@ class Upload {
 				$array_result[$i]['error']['upload'] = 1;
 			}
 
-			if (!$this->is_support_type($files[$i]['type'])) {
+			if (!$this->is_support_type($type)) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['type'] = 1;
 			}
@@ -97,8 +98,10 @@ class Upload {
 				continue;
 			}
 
-			$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[ $files[$i]['type'] ];
+			$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
 			move_uploaded_file($files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
+
+			$this->image_resize(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
 
 			$array_result[$i]['url'] = $new_name;
 		}
@@ -130,5 +133,29 @@ class Upload {
 			return false;
 		}
 		return true;
+	}
+
+	public function image_resize($src_path, $dest_path, $newwidth) {
+		list($width, $height, $type) = getimagesize($src_path);
+
+		if ($newwidth > $width) {
+			copy($src_path, $dest_path);
+			return;
+		}
+
+		$newheight = round($newwidth * $height / $width);
+
+		$create_function = "imagecreatefrom" . $this->_allowed_types[$type]['function_postfix'];
+		$src_res = $create_function($src_path);
+
+		$dest_res = imagecreatetruecolor($newwidth, $newheight);
+
+		imagecopyresampled($dest_res, $src_res, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		
+		$create_function = "image" . $this->_allowed_types[$type]['function_postfix'];
+		$create_function($dest_res, $dest_path);
+		
+		imagedestroy($dest_res);
+		imagedestroy($src_res);
 	}
 }
