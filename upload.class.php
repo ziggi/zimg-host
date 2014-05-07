@@ -54,7 +54,7 @@ class Upload {
 			copy($temp_name, __DIR__ . '/file/' . $new_name);
 			unlink($temp_name);
 
-			$this->image_resize(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
+			$this->create_thumbnail_image(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
 
 			$array_result[$i]['url'] = $new_name;
 		}
@@ -101,7 +101,7 @@ class Upload {
 			$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
 			move_uploaded_file($files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
 
-			$this->image_resize(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
+			$this->create_thumbnail_image(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
 
 			$array_result[$i]['url'] = $new_name;
 		}
@@ -135,7 +135,7 @@ class Upload {
 		return true;
 	}
 
-	public function image_resize($src_path, $dest_path, $newwidth) {
+	public function create_thumbnail_image($src_path, $dest_path, $newwidth) {
 		list($width, $height, $type) = getimagesize($src_path);
 
 		if ($newwidth > $width) {
