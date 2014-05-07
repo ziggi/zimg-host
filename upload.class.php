@@ -8,6 +8,8 @@ class Upload {
 			IMAGETYPE_BMP  => array('function_postfix' => 'wbmp', 'file_format' => 'bmp'),
 		);
 
+	const MAX_FILE_SIZE = '2M';
+
 	public function upload_urls($urls_array) {
 		$files_count = count($urls_array);
 
@@ -122,9 +124,14 @@ class Upload {
 	}
 
 	public function is_support_size($size) {
-		if ($size === false || $size > 2 * 1024 * 1024) {
+		$is_app_support_size = $size <= $this->return_bytes(self::MAX_FILE_SIZE);
+		$is_php_support_size = $size <= $this->return_bytes(ini_get('upload_max_filesize'));
+		$is_post_support_size = $size <= $this->return_bytes(ini_get('post_max_size'));
+
+		if ($size === false || !$is_app_support_size || !$is_php_support_size || !$is_post_support_size) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -157,5 +164,21 @@ class Upload {
 		
 		imagedestroy($dest_res);
 		imagedestroy($src_res);
+	}
+
+	public function return_bytes($val) {
+		$val = trim($val);
+		$last = strtolower($val[ strlen($val) - 1 ]);
+
+		switch ($last) {
+			case 'g':
+				$val *= 1024;
+			case 'm':
+				$val *= 1024;
+			case 'k':
+				$val *= 1024;
+		}
+
+		return $val;
 	}
 }
