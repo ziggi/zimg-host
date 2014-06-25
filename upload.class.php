@@ -21,7 +21,7 @@ class Upload {
 			$array_result[$i]['error']['type'] = 0;
 			$array_result[$i]['error']['size'] = 0;
 
-
+			// copy file to temp dir
 			$temp_name = tempnam("/tmp", "zmg");
 			$is_copied = copy($urls_array[$i], $temp_name);
 
@@ -29,19 +29,18 @@ class Upload {
 				$array_result[$i]['error']['upload'] = 1;
 			}
 
-
+			// get size and type
 			list($width, $height, $type) = getimagesize($temp_name);
 			$array_result[$i]['type'] = $type;
 			$array_result[$i]['size']['width'] = $width;
 			$array_result[$i]['size']['height'] = $height;
+			$array_result[$i]['size']['filesize'] = filesize($temp_name);
 
+			// error checking
 			if (!$this->is_support_type($array_result[$i]['type'])) {
 				$array_result[$i]['error']['upload'] = 1;
 				$array_result[$i]['error']['type'] = 1;
 			}
-
-
-			$array_result[$i]['size']['filesize'] = filesize($temp_name);
 
 			if (!$this->is_support_size($array_result[$i]['size']['filesize'])) {
 				$array_result[$i]['error']['upload'] = 1;
@@ -52,12 +51,17 @@ class Upload {
 				continue;
 			}
 
+			// generate new name
 			$new_name = md5(microtime() . $urls_array[$i] . rand(0, 9999)) . '.' . $this->_allowed_types[ $array_result[$i]['type'] ]['file_format'];
+
+			// save image with new name and remove temp file
 			copy($temp_name, __DIR__ . '/file/' . $new_name);
 			unlink($temp_name);
 
+			// make thumbnail image
 			$this->create_thumbnail_image(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
 
+			// save new name for response
 			$array_result[$i]['url'] = $new_name;
 		}
 		echo json_encode($array_result);
@@ -72,12 +76,14 @@ class Upload {
 		for ($i = 0; $i < $files_count; $i++) {
 			$array_result[$i]['name'] = $files[$i]['name'];
 
+			// get size and type
 			list($width, $height, $type) = getimagesize($files[$i]['tmp_name']);
 			$array_result[$i]['type'] = $type;
 			$array_result[$i]['size']['width'] = $width;
 			$array_result[$i]['size']['height'] = $height;
 			$array_result[$i]['size']['filesize'] = $files[$i]['size'];
 
+			// error checking
 			$array_result[$i]['error']['upload'] = 0;
 			$array_result[$i]['error']['type'] = 0;
 			$array_result[$i]['error']['size'] = 0;
@@ -100,11 +106,16 @@ class Upload {
 				continue;
 			}
 
+			// generate new name
 			$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
+			
+			// move temp file with new name
 			move_uploaded_file($files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
 
+			// make thumbnail image
 			$this->create_thumbnail_image(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
 
+			// save new name for response
 			$array_result[$i]['url'] = $new_name;
 		}
 		echo json_encode($array_result);
@@ -142,22 +153,22 @@ class Upload {
 		return true;
 	}
 
-	public function create_thumbnail_image($src_path, $dest_path, $newwidth) {
+	public function create_thumbnail_image($src_path, $dest_path, $new_width) {
 		list($width, $height, $type) = getimagesize($src_path);
 
-		if ($newwidth > $width) {
+		if ($new_width > $width) {
 			copy($src_path, $dest_path);
 			return;
 		}
 
-		$newheight = round($newwidth * $height / $width);
+		$new_height = round($new_width * $height / $width);
 
 		$create_function = "imagecreatefrom" . $this->_allowed_types[$type]['function_postfix'];
 		$src_res = $create_function($src_path);
 
-		$dest_res = imagecreatetruecolor($newwidth, $newheight);
+		$dest_res = imagecreatetruecolor($new_width, $new_height);
 
-		imagecopyresampled($dest_res, $src_res, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		imagecopyresampled($dest_res, $src_res, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 		
 		$create_function = "image" . $this->_allowed_types[$type]['function_postfix'];
 		$create_function($dest_res, $dest_path);
