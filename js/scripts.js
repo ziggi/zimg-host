@@ -57,17 +57,30 @@ $(function(){
 			var fileName = result[i].name;
 
 			if (result[i].error.upload == 1) {
-				var errorTypeText;
+				var errorTypeText = 'Reason: ';
 
-				if (result[i].error.type == 1 && result[i].error.size == 1) {
-					errorTypeText = 'Type and size error.';
-				} else if (result[i].error.type == 1) {
-					errorTypeText = 'Type error.';
-				} else if (result[i].error.size == 1) {
-					errorTypeText = 'Size error.';
-				} else {
-					errorTypeText = 'Server error.';
+				if (result[i].error.type == 1) {
+					errorTypeText += 'bad type';
+					errorTypeText += ', ';
 				}
+
+				if (result[i].error.size == 1) {
+					errorTypeText += 'bad size';
+					errorTypeText += ', ';
+				}
+
+				if (result[i].error.host == 1) {
+					errorTypeText += 'this host is blacklisted';
+					errorTypeText += ', ';
+				}
+
+				if (result[i].error.type == 0 && result[i].error.size == 0 && result[i].error.host == 0) {
+					errorTypeText = 'server error';
+					errorTypeText += ', ';
+				}
+
+				errorTypeText = errorTypeText.slice(0, errorTypeText.length - 2);
+				errorTypeText += '.';
 
 				$.get('file_item_error.php', {name: fileName, error: errorTypeText}, function(data) {
 					$('#file-list').append(data);

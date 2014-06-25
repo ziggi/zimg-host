@@ -8,6 +8,10 @@ class Upload {
 			IMAGETYPE_BMP  => array('function_postfix' => 'wbmp', 'file_format' => 'bmp'),
 		);
 
+	private $_blacklisted_domains = array(
+			'img.ziggi.org',
+		);
+
 	const MAX_FILE_SIZE = '2M';
 
 	public function upload_urls($urls_array) {
@@ -20,6 +24,15 @@ class Upload {
 			$array_result[$i]['error']['upload'] = 0;
 			$array_result[$i]['error']['type'] = 0;
 			$array_result[$i]['error']['size'] = 0;
+			$array_result[$i]['error']['host'] = 0;
+
+			// check domain
+			foreach ($this->_blacklisted_domains as $domain_name) {
+				if (strpos($urls_array[$i], $domain_name) !== false) {
+					$array_result[$i]['error']['upload'] = 1;
+					$array_result[$i]['error']['host'] = 1;
+				}
+			}
 
 			// copy file to temp dir
 			$temp_name = tempnam("/tmp", "zmg");
@@ -116,7 +129,7 @@ class Upload {
 			do {
 				$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
 			} while (file_exists(__DIR__ . '/file/' . $new_name));
-			
+
 			// move temp file with new name
 			move_uploaded_file($files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
 
