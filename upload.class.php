@@ -52,7 +52,11 @@ class Upload {
 			}
 
 			// generate new name
-			$new_name = md5(microtime() . $urls_array[$i] . rand(0, 9999)) . '.' . $this->_allowed_types[ $array_result[$i]['type'] ]['file_format'];
+			$new_name = null;
+			
+			do {
+				$new_name = md5(microtime() . $urls_array[$i] . rand(0, 9999)) . '.' . $this->_allowed_types[ $array_result[$i]['type'] ]['file_format'];
+			} while (file_exists(__DIR__ . '/file/' . $new_name));
 
 			// save image with new name and remove temp file
 			copy($temp_name, __DIR__ . '/file/' . $new_name);
@@ -107,7 +111,11 @@ class Upload {
 			}
 
 			// generate new name
-			$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
+			$new_name = null;
+			
+			do {
+				$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
+			} while (file_exists(__DIR__ . '/file/' . $new_name));
 			
 			// move temp file with new name
 			move_uploaded_file($files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
