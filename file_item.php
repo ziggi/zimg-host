@@ -1,9 +1,9 @@
 <?php
-$url = $_GET['url'];
-$thumburl = $_GET['thumbUrl'];
-$name = $_GET['name'];
-$width = $_GET['size']['width'];
-$height = $_GET['size']['height'];
+$url = htmlentities($_GET['url']);
+$thumburl = htmlentities($_GET['thumbUrl']);
+$name = htmlentities($_GET['name']);
+$width = htmlentities($_GET['size']['width']);
+$height = htmlentities($_GET['size']['height']);
 $filesize = round($_GET['size']['filesize'] / 1024, 2);
 ?>
 <div class="file-item">
