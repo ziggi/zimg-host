@@ -259,8 +259,9 @@ body {
 .btn {
 	display: block;
 	padding: 5px 12px;
+	margin: 2px;
 	cursor: pointer;
-	font-family: sans-serif;
+	font-family: Arial, sans-serif;
 	font-weight: bold;
 	font-size: 13px;
 	text-shadow: 1px 1px #111;
