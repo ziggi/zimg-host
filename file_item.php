@@ -9,7 +9,7 @@ $filesize = round($_GET['size']['filesize'] / 1024, 2);
 <div class="file-item">
   <p>
     <a class="direct_link" href="<?=$url?>" target="_blank">
-      <img title='Width: <?=$width?>px&#013;Height: <?=$height?>px&#013;Filesize: <?=$filesize?> KiB' class="img_small" src="<?=$thumburl?>">
+      <img title='Width: <?=$width?>px&#10;Height: <?=$height?>px&#10;Filesize: <?=$filesize?> KiB' class="img_small" src="<?=$thumburl?>">
     </a>
   </p>
   <div class="file-links">
