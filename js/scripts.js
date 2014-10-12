@@ -89,8 +89,8 @@ $(function(){
 				continue;
 			}
 
-			var fileUrl = appLocation + 'file/' + result[i].url;
-			var fileThumbnailUrl = appLocation + 'file/thumbnail/' + result[i].url;
+			var fileUrl = appLocation + result[i].url;
+			var fileThumbnailUrl = appLocation + 'thumb/' + result[i].url;
 			var fileSize = result[i].size;
 
 			$.get('file_item.php', {url: fileUrl, thumbUrl: fileThumbnailUrl, name: fileName, size: fileSize}, function(data) {

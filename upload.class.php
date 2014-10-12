@@ -131,10 +131,14 @@ class Upload {
 			} while (file_exists(__DIR__ . '/file/' . $new_name));
 
 			// move temp file with new name
-			move_uploaded_file($files[$i]['tmp_name'], __DIR__ . '/file/' . $new_name);
+			$file_path = __DIR__ . '/file/' . $new_name[0] . '/' . $new_name[1] . '/';
+			mkdir($file_path, 0777, true);
+			move_uploaded_file($files[$i]['tmp_name'], $file_path . $new_name);
 
 			// make thumbnail image
-			$this->create_thumbnail_image(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
+			$thumb_path = __DIR__ . '/file/thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
+			mkdir($thumb_path, 0777, true);
+			$this->create_thumbnail_image($file_path . $new_name, $thumb_path . $new_name, 420);
 
 			// save new name for response
 			$array_result[$i]['url'] = $new_name;
