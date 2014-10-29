@@ -194,6 +194,7 @@ select option {
 .file-item p {
 	margin: 0;
 	text-align: center;
+	word-wrap: break-word;
 }
 
 .file-item img {
