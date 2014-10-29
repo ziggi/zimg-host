@@ -119,7 +119,7 @@ select option {
 #overlay {
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1;
-	position: absolute;
+	position: fixed;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -129,7 +129,7 @@ select option {
 
 .popup {
 	display: none;
-	position: absolute;
+	position: fixed;
 	z-index: 2;
 	top: 20%;
 	left: 0; right: 0;
