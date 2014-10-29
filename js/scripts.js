@@ -66,9 +66,14 @@ $(function(){
 
 	$('#btn-url-upload').on('click', function() {
 		var inputValue = $('#url-input').val();
+		if (inputValue.length == 0) {
+			$('#url-menu textarea').focus();
+			return;
+		}
+
 		var inputArray = inputValue.split('\n');
 
-		$.get("upload.php", {urls: inputArray}, function(data) {
+		$.post("upload.php", {urls: inputArray}, function(data) {
 			$('#btn-url-clear').trigger('click');
 			$('#btn-url-close').trigger('click');
 			addImagesFromArray(data);
@@ -107,7 +112,7 @@ $(function(){
 				errorTypeText = errorTypeText.slice(0, errorTypeText.length - 2);
 				errorTypeText += '.';
 
-				$.get('file_item_error.php', {name: fileName, error: errorTypeText}, function(data) {
+				$.post('file_item_error.php', {name: fileName, error: errorTypeText}, function(data) {
 					$('#file-list').append(data);
 				});
 
@@ -118,7 +123,7 @@ $(function(){
 			var fileThumbnailUrl = appLocation + 'thumb/' + result[i].url;
 			var fileSize = result[i].size;
 
-			$.get('file_item.php', {url: fileUrl, thumbUrl: fileThumbnailUrl, name: fileName, size: fileSize}, function(data) {
+			$.post('file_item.php', {url: fileUrl, thumbUrl: fileThumbnailUrl, name: fileName, size: fileSize}, function(data) {
 				$('#file-list').append(data);
 
 				if ($('.file-item').length > 1) {

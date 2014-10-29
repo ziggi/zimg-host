@@ -72,11 +72,19 @@ class Upload {
 			} while (file_exists(__DIR__ . '/file/' . $new_name));
 
 			// save image with new name and remove temp file
-			copy($temp_name, __DIR__ . '/file/' . $new_name);
+			$file_path = __DIR__ . '/file/' . $new_name[0] . '/' . $new_name[1] . '/';
+			if (!file_exists($file_path)) {
+				mkdir($file_path, 0777, true);
+			}
+			copy($temp_name, $file_path . $new_name);
 			unlink($temp_name);
 
 			// make thumbnail image
-			$this->create_thumbnail_image(__DIR__ . '/file/' . $new_name, __DIR__ . '/file/thumbnail/' . $new_name, 420);
+			$thumb_path = __DIR__ . '/file/thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
+			if (!file_exists($thumb_path)) {
+				mkdir($thumb_path, 0777, true);
+			}
+			$this->create_thumbnail_image($file_path . $new_name, $thumb_path . $new_name, 420);
 
 			// save new name for response
 			$array_result[$i]['url'] = $new_name;
@@ -132,12 +140,16 @@ class Upload {
 
 			// move temp file with new name
 			$file_path = __DIR__ . '/file/' . $new_name[0] . '/' . $new_name[1] . '/';
-			mkdir($file_path, 0777, true);
+			if (!file_exists($file_path)) {
+				mkdir($file_path, 0777, true);
+			}
 			move_uploaded_file($files[$i]['tmp_name'], $file_path . $new_name);
 
 			// make thumbnail image
 			$thumb_path = __DIR__ . '/file/thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
-			mkdir($thumb_path, 0777, true);
+			if (!file_exists($thumb_path)) {
+				mkdir($thumb_path, 0777, true);
+			}
 			$this->create_thumbnail_image($file_path . $new_name, $thumb_path . $new_name, 420);
 
 			// save new name for response
