@@ -265,7 +265,7 @@ select option {
 		width: 100%;
 		min-width: 270px;
 	}
-	#url-menu {
+	.popup {
 		width: 100%;
 		min-width: 270px;
 	}
