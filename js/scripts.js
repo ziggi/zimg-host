@@ -5,7 +5,7 @@ $(function(){
 		$('#overlay').fadeIn(150);
 		$('#links-menu').fadeIn(150);
 		$('#links-menu select').trigger('change');
-		$('#links-menu textarea').focus();
+		$('#links-input').select();
 	});
 
 	$('#btn-links-close').on('click', function() {
@@ -23,6 +23,7 @@ $(function(){
 		});
 
 		$('#links-input').val(text);
+		$('#links-input').select();
 	});
 
 	$('#btn-url').on('click', function() {
