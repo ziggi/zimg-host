@@ -36,7 +36,7 @@ class Upload {
 
 			// copy file to temp dir
 			$temp_name = tempnam("/tmp", "zmg");
-			$is_copied = copy($urls_array[$i], $temp_name);
+			$is_copied = @copy($urls_array[$i], $temp_name);
 
 			if (!$is_copied) {
 				$array_result[$i]['error']['upload'] = 1;
