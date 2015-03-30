@@ -5,7 +5,7 @@ class Upload {
 			IMAGETYPE_GIF  => array('function_postfix' => 'gif',  'file_format' => 'gif'),
 			IMAGETYPE_JPEG => array('function_postfix' => 'jpeg', 'file_format' => 'jpg'),
 			IMAGETYPE_PNG  => array('function_postfix' => 'png',  'file_format' => 'png'),
-			IMAGETYPE_BMP  => array('function_postfix' => 'wbmp', 'file_format' => 'bmp'),
+			IMAGETYPE_WBMP => array('function_postfix' => 'wbmp', 'file_format' => 'wbmp'),
 		);
 
 	private $_blacklisted_domains = array(
