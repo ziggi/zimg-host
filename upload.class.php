@@ -93,6 +93,10 @@ class Upload {
 	}
 
 	public function upload_files($files_array) {
+		if (!is_array($files_array)) {
+			return;
+		}
+
 		$files_count = count($files_array['name']);
 		$files = $this->restruct_input_array($files_array, $files_count);
 
@@ -201,7 +205,10 @@ class Upload {
 		$new_height = round($new_width * $height / $width);
 
 		$create_function = "imagecreatefrom" . $this->_allowed_types[$type]['function_postfix'];
-		$src_res = $create_function($src_path);
+		$src_res = @$create_function($src_path);
+		if ($src_res === FALSE) {
+			return;
+		}
 
 		$dest_res = imagecreatetruecolor($new_width, $new_height);
 
