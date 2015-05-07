@@ -215,6 +215,13 @@ select option {
 	        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
+.file-item .fullwidth input {
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+
 .file-links h2 {
 	margin: 0;
 	padding: 0;
@@ -225,6 +232,10 @@ select option {
 
 .file-links .row {
 	padding-top: 3px;
+}
+
+.file-item .fullwidth {
+	width: 100%;
 }
 
 .progress {

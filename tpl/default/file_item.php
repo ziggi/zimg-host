@@ -6,16 +6,10 @@
   </p>
   <div class="file-links">
     <div class="row">
-      <div class="pull-left">
+      <div class="pull-left fullwidth">
         <h2>Link</h2>
         <div>
           <input type="text" class="link" onclick="select()" readonly value="<?=$url?>">
-        </div>
-      </div>
-      <div class="pull-right">
-        <h2>Direct link</h2>
-        <div>
-          <input type="text" class="direct_link" onclick="select()" readonly value="<?=$url?>">
         </div>
       </div>
       <div class="clear"></div>
