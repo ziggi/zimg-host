@@ -16,7 +16,7 @@
 <div id="overlay"></div>
 
 <div id="info">
-  <span>zimg-host v2.1.1</span>
+  <span>zimg-host v2.1.2</span>
   <span><a href="https://github.com/ziggi/zimg-host" target="_blank">GitHub</a></span>
   <span><a href="http://ziggi.org/" target="_blank">Home</a></span>
 </div>
