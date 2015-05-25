@@ -166,9 +166,13 @@ class Upload {
 		$result_array = array();
 		$file_keys = array_keys($files_array);
 
-		for ($i = 0; $i < $files_count; $i++) {
-			foreach ($file_keys as $key) {
-				$result_array[$i][$key] = $files_array[$key][$i];
+		if (!is_array($files_array[ $file_keys[0] ])) {
+			$result_array[0] = $files_array;
+		} else {
+			for ($i = 0; $i < $files_count; $i++) {
+				foreach ($file_keys as $key) {
+					$result_array[$i][$key] = $files_array[$key][$i];
+				}
 			}
 		}
 
