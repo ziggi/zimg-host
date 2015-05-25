@@ -6,22 +6,22 @@ if (empty($conf['uri_param'])) {
 	return;
 }
 
-$img_file = str_replace('thumb/', '', $conf['uri_param'], $count);
+$file_name = str_replace('thumb/', '', $conf['uri_param'], $count);
 
 if ($count == 1) {
-	$img_file = 'file/thumb/' . $img_file[0] . '/' . $img_file[1] . '/' . $img_file;
+	$file_path = 'file/thumb/' . $file_name[0] . '/' . $file_name[1] . '/' . $file_name;
 } else {
-	$img_file = 'file/' . $img_file[0] . '/' . $img_file[1] . '/' . $img_file;
+	$file_path = 'file/' . $file_name[0] . '/' . $file_name[1] . '/' . $file_name;
 }
 
-$is_valid_file = preg_match('/^file\/[0-9a-f]\/[0-9a-f]\/[0-9a-f]{32}\.[a-z]+$/', $img_file) == 1;
+$is_valid_file = preg_match('/^[0-9a-f]{32}\.[a-z]+$/', $file_name) == 1;
 
-if ($is_valid_file && file_exists($img_file)) {
-	$img_info = getimagesize($img_file);
+if ($is_valid_file && file_exists($file_path)) {
+	$img_info = getimagesize($file_path);
 
 	header('Content-type: ' . $img_info['mime']);
 
-	readfile($img_file);
+	readfile($file_path);
 } else {
 	header('HTTP/1.0 404 Not Found');
 	echo '404';
