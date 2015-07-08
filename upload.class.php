@@ -102,7 +102,7 @@ class Upload {
 		$new_name = null;
 		
 		do {
-			$new_name = $this->get_random_id() . '.' . $this->_allowed_types[$type]['file_format'];
+			$new_name = $this->get_random_name() . '.' . $this->_allowed_types[$type]['file_format'];
 		} while (file_exists(__DIR__ . '/file/' . $new_name));
 
 		// move temp file with new name
@@ -153,7 +153,7 @@ class Upload {
 		imagedestroy($src_res);
 	}
 
-	private function get_random_id() {
+	private function get_random_name() {
 		$base = self::$filename_config['base'];
 		$length = self::$filename_config['length'];
 		$max = strlen($base) - 1;
