@@ -1,6 +1,17 @@
 <?php
+/**
+ * A image upload class
+ *
+ * This class makes it easy to upload images to the server.
+ *
+ * @author Sergey Marochkin <me@ziggi.org>
+ * @version 2.2
+ * @copyright 2011-2015 Sergey Marochkin
+ * @license The MIT License
+ */
 
 class Upload {
+	/** @var array Allowed types for upload */
 	private $_allowed_types = array(
 			IMAGETYPE_GIF  => array('function_postfix' => 'gif',  'file_format' => 'gif'),
 			IMAGETYPE_JPEG => array('function_postfix' => 'jpeg', 'file_format' => 'jpg'),
@@ -8,18 +19,28 @@ class Upload {
 			IMAGETYPE_WBMP => array('function_postfix' => 'wbmp', 'file_format' => 'wbmp'),
 		);
 
+	/** @var array Blacklisted domains */
 	private $_blacklisted_domains = array(
 			'img.ziggi.org',
 		);
 
+	/** @var array Alphabet and length of the generated filename */
 	public static $filename_config = array(
 			'base' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
 			'length' => 8
 		);
 
+	/** @var string Maximum file size */
 	const MAX_FILE_SIZE = '2M';
 
-	public function upload_urls($urls_array) {
+	/**
+	 * Uploading images from URLs array
+	 *
+	 * @param array $urls_array
+	 *
+	 * @return void
+	 */
+	public function upload_urls(array $urls_array) {
 		$files_count = count($urls_array);
 
 		$array_result = array();
@@ -47,7 +68,14 @@ class Upload {
 		echo json_encode($array_result);
 	}
 
-	public function upload_files($files_array) {
+	/**
+	 * Uploading images from $_FILES array
+	 *
+	 * @param array $files_array
+	 *
+	 * @return void
+	 */
+	public function upload_files(array $files_array) {
 		if (!is_array($files_array)) {
 			return;
 		}
@@ -56,7 +84,6 @@ class Upload {
 		$files = $this->restruct_input_array($files_array, $files_count);
 
 		$array_result = array();
-		file_put_contents("log.txt", print_r($files, true));
 
 		for ($i = 0; $i < $files_count; $i++) {
 			$this->upload_handling($array_result[$i], $files[$i]['name'], $files[$i]['tmp_name'], $files[$i]['error']);
@@ -65,6 +92,16 @@ class Upload {
 		echo json_encode($array_result);
 	}
 
+	/**
+	 * Upload images handler
+	 *
+	 * @param array  $array     Array from function-caller
+	 * @param string $name      Image name
+	 * @param string $temp_name Temporary name (current file location)
+	 * @param bool   $is_error  Have errors after uploading
+	 *
+	 * @return bool true if image has been uploaded, false if not
+	 */
 	protected function upload_handling(&$array, $name, $temp_name, $is_error) {
 		$array['name'] = $name;
 
@@ -126,6 +163,15 @@ class Upload {
 		return true;
 	}
 
+	/**
+	 * Creates thumbnail images
+	 *
+	 * @param string $src_path  Path to the source file
+	 * @param string $dest_path The destination path
+	 * @param int    $new_width Width for thumbnail image
+	 *
+	 * @return void
+	 */
 	private function create_thumbnail_image($src_path, $dest_path, $new_width) {
 		list($width, $height, $type) = getimagesize($src_path);
 
@@ -153,6 +199,11 @@ class Upload {
 		imagedestroy($src_res);
 	}
 
+	/**
+	 * Generating a random filename
+	 *
+	 * @return string
+	 */
 	private function get_random_name() {
 		$base = self::$filename_config['base'];
 		$length = self::$filename_config['length'];
@@ -167,6 +218,13 @@ class Upload {
 		return $result_str;
 	}
 
+	/**
+	 * Validation of the file size
+	 *
+	 * @param int $size Size in bytes
+	 *
+	 * @return bool
+	 */
 	private function is_support_size($size) {
 		$is_app_support_size = $size <= $this->return_bytes(self::MAX_FILE_SIZE);
 		$is_php_support_size = $size <= $this->return_bytes(ini_get('upload_max_filesize'));
@@ -179,6 +237,13 @@ class Upload {
 		return true;
 	}
 
+	/**
+	 * Validation of the file type
+	 *
+	 * @param int $type Exif filetype
+	 *
+	 * @return bool
+	 */
 	private function is_support_type($type) {
 		if (!isset($this->_allowed_types[$type])) {
 			return false;
@@ -186,7 +251,15 @@ class Upload {
 		return true;
 	}
 
-	private function restruct_input_array($files_array, $files_count) {
+	/**
+	 * Restructures $_FILES array
+	 *
+	 * @param array $files_array $_FILES array
+	 * @param int   $files_count Number of files
+	 *
+	 * @return array Restructured $_FILES array
+	 */
+	private function restruct_input_array(array $files_array, $files_count) {
 		$result_array = array();
 		$file_keys = array_keys($files_array);
 
@@ -203,6 +276,13 @@ class Upload {
 		return $result_array;
 	}
 
+	/**
+	 * Returns bytes by mask
+	 *
+	 * @param string $val Size with ending 'g', 'm' or 'k' (10m = 10 MiB, 10k = 10 KiB)
+	 *
+	 * @return int Bytes
+	 */
 	private function return_bytes($val) {
 		$val = trim($val);
 		$last = strtolower($val[ strlen($val) - 1 ]);
