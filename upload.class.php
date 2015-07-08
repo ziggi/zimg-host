@@ -36,7 +36,7 @@ class Upload {
 			$is_copied = @copy($urls_array[$i], $temp_name);
 
 			// upload
-			$this->upl($array_result[$i], $urls_array[$i], $temp_name, !$is_copied | $is_blacklisted);
+			$this->upload_handling($array_result[$i], $urls_array[$i], $temp_name, !$is_copied | $is_blacklisted);
 		}
 
 		echo json_encode($array_result);
@@ -53,13 +53,13 @@ class Upload {
 		$array_result = array();
 
 		for ($i = 0; $i < $files_count; $i++) {
-			$this->upl($array_result[$i], $files[$i]['name'], $files[$i]['tmp_name'], $files[$i]['error']);
+			$this->upload_handling($array_result[$i], $files[$i]['name'], $files[$i]['tmp_name'], $files[$i]['error']);
 		}
 
 		echo json_encode($array_result);
 	}
 
-	protected function upl(&$array, $name, $temp_name, $is_error) {
+	protected function upload_handling(&$array, $name, $temp_name, $is_error) {
 		$array['name'] = $name;
 
 		// get size and type
