@@ -12,6 +12,11 @@ class Upload {
 			'img.ziggi.org',
 		);
 
+	public static $filename_config = array(
+			'base' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+			'length' => 8
+		);
+
 	const MAX_FILE_SIZE = '2M';
 
 	public function upload_urls($urls_array) {
@@ -51,6 +56,7 @@ class Upload {
 		$files = $this->restruct_input_array($files_array, $files_count);
 
 		$array_result = array();
+		file_put_contents("log.txt", print_r($files, true));
 
 		for ($i = 0; $i < $files_count; $i++) {
 			$this->upload_handling($array_result[$i], $files[$i]['name'], $files[$i]['tmp_name'], $files[$i]['error']);
@@ -96,7 +102,7 @@ class Upload {
 		$new_name = null;
 		
 		do {
-			$new_name = md5(microtime() . $name . $temp_name . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
+			$new_name = $this->get_random_id() . '.' . $this->_allowed_types[$type]['file_format'];
 		} while (file_exists(__DIR__ . '/file/' . $new_name));
 
 		// move temp file with new name
@@ -117,42 +123,6 @@ class Upload {
 		// save new name for response
 		$array['url'] = $new_name;
 
-		return true;
-	}
-
-	private function restruct_input_array($files_array, $files_count) {
-		$result_array = array();
-		$file_keys = array_keys($files_array);
-
-		if (!is_array($files_array[ $file_keys[0] ])) {
-			$result_array[0] = $files_array;
-		} else {
-			for ($i = 0; $i < $files_count; $i++) {
-				foreach ($file_keys as $key) {
-					$result_array[$i][$key] = $files_array[$key][$i];
-				}
-			}
-		}
-
-		return $result_array;
-	}
-
-	private function is_support_size($size) {
-		$is_app_support_size = $size <= $this->return_bytes(self::MAX_FILE_SIZE);
-		$is_php_support_size = $size <= $this->return_bytes(ini_get('upload_max_filesize'));
-		$is_post_support_size = $size <= $this->return_bytes(ini_get('post_max_size'));
-
-		if ($size === false || !$is_app_support_size || !$is_php_support_size || !$is_post_support_size) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private function is_support_type($type) {
-		if (!isset($this->_allowed_types[$type])) {
-			return false;
-		}
 		return true;
 	}
 
@@ -181,6 +151,56 @@ class Upload {
 		
 		imagedestroy($dest_res);
 		imagedestroy($src_res);
+	}
+
+	private function get_random_id() {
+		$base = self::$filename_config['base'];
+		$length = self::$filename_config['length'];
+		$max = strlen($base) - 1;
+
+		$result_str = '';
+
+		for ($i = 0; $i < $length; $i++) {
+			$result_str .= $base[ mt_rand(0, $max) ];
+		}
+		
+		return $result_str;
+	}
+
+	private function is_support_size($size) {
+		$is_app_support_size = $size <= $this->return_bytes(self::MAX_FILE_SIZE);
+		$is_php_support_size = $size <= $this->return_bytes(ini_get('upload_max_filesize'));
+		$is_post_support_size = $size <= $this->return_bytes(ini_get('post_max_size'));
+
+		if ($size === false || !$is_app_support_size || !$is_php_support_size || !$is_post_support_size) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function is_support_type($type) {
+		if (!isset($this->_allowed_types[$type])) {
+			return false;
+		}
+		return true;
+	}
+
+	private function restruct_input_array($files_array, $files_count) {
+		$result_array = array();
+		$file_keys = array_keys($files_array);
+
+		if (!is_array($files_array[ $file_keys[0] ])) {
+			$result_array[0] = $files_array;
+		} else {
+			for ($i = 0; $i < $files_count; $i++) {
+				foreach ($file_keys as $key) {
+					$result_array[$i][$key] = $files_array[$key][$i];
+				}
+			}
+		}
+
+		return $result_array;
 	}
 
 	private function return_bytes($val) {
