@@ -20,17 +20,14 @@ class Upload {
 		$array_result = array();
 
 		for ($i = 0; $i < $files_count; $i++) {
-			$array_result[$i]['name'] = $urls_array[$i];
-			$array_result[$i]['error']['upload'] = 0;
-			$array_result[$i]['error']['type'] = 0;
-			$array_result[$i]['error']['size'] = 0;
-			$array_result[$i]['error']['host'] = 0;
+			$is_blacklisted = false;
 
 			// check domain
 			foreach ($this->_blacklisted_domains as $domain_name) {
 				if (strpos($urls_array[$i], $domain_name) !== false) {
-					$array_result[$i]['error']['upload'] = 1;
+					$is_blacklisted = true;
 					$array_result[$i]['error']['host'] = 1;
+					break;
 				}
 			}
 
@@ -38,57 +35,10 @@ class Upload {
 			$temp_name = tempnam("/tmp", "zmg");
 			$is_copied = @copy($urls_array[$i], $temp_name);
 
-			if (!$is_copied) {
-				$array_result[$i]['error']['upload'] = 1;
-			}
-
-			// get size and type
-			list($width, $height, $type) = getimagesize($temp_name);
-			$array_result[$i]['type'] = $type;
-			$array_result[$i]['size']['width'] = $width;
-			$array_result[$i]['size']['height'] = $height;
-			$array_result[$i]['size']['filesize'] = filesize($temp_name);
-
-			// error checking
-			if (!$this->is_support_type($array_result[$i]['type'])) {
-				$array_result[$i]['error']['upload'] = 1;
-				$array_result[$i]['error']['type'] = 1;
-			}
-
-			if (!$this->is_support_size($array_result[$i]['size']['filesize'])) {
-				$array_result[$i]['error']['upload'] = 1;
-				$array_result[$i]['error']['size'] = 1;
-			}
-
-			if ($array_result[$i]['error']['upload'] == 1) {
-				continue;
-			}
-
-			// generate new name
-			$new_name = null;
-			
-			do {
-				$new_name = md5(microtime() . $urls_array[$i] . rand(0, 9999)) . '.' . $this->_allowed_types[ $array_result[$i]['type'] ]['file_format'];
-			} while (file_exists(__DIR__ . '/file/' . $new_name));
-
-			// save image with new name and remove temp file
-			$file_path = __DIR__ . '/file/' . $new_name[0] . '/' . $new_name[1] . '/';
-			if (!file_exists($file_path)) {
-				mkdir($file_path, 0777, true);
-			}
-			copy($temp_name, $file_path . $new_name);
-			unlink($temp_name);
-
-			// make thumbnail image
-			$thumb_path = __DIR__ . '/file/thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
-			if (!file_exists($thumb_path)) {
-				mkdir($thumb_path, 0777, true);
-			}
-			$this->create_thumbnail_image($file_path . $new_name, $thumb_path . $new_name, 420);
-
-			// save new name for response
-			$array_result[$i]['url'] = $new_name;
+			// upload
+			$this->upl($array_result[$i], $urls_array[$i], $temp_name, !$is_copied | $is_blacklisted);
 		}
+
 		echo json_encode($array_result);
 	}
 
@@ -103,66 +53,74 @@ class Upload {
 		$array_result = array();
 
 		for ($i = 0; $i < $files_count; $i++) {
-			$array_result[$i]['name'] = $files[$i]['name'];
-
-			// get size and type
-			list($width, $height, $type) = getimagesize($files[$i]['tmp_name']);
-			$array_result[$i]['type'] = $type;
-			$array_result[$i]['size']['width'] = $width;
-			$array_result[$i]['size']['height'] = $height;
-			$array_result[$i]['size']['filesize'] = $files[$i]['size'];
-
-			// error checking
-			$array_result[$i]['error']['upload'] = 0;
-			$array_result[$i]['error']['type'] = 0;
-			$array_result[$i]['error']['size'] = 0;
-
-			if ($files[$i]['error'] === 1) {
-				$array_result[$i]['error']['upload'] = 1;
-			}
-
-			if (!$this->is_support_type($type)) {
-				$array_result[$i]['error']['upload'] = 1;
-				$array_result[$i]['error']['type'] = 1;
-			}
-
-			if (!$this->is_support_size($files[$i]['size'])) {
-				$array_result[$i]['error']['upload'] = 1;
-				$array_result[$i]['error']['size'] = 1;
-			}
-
-			if ($array_result[$i]['error']['upload'] == 1) {
-				continue;
-			}
-
-			// generate new name
-			$new_name = null;
-			
-			do {
-				$new_name = md5(microtime() . $files[$i]['name'] . $files[$i]['tmp_name'] . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
-			} while (file_exists(__DIR__ . '/file/' . $new_name));
-
-			// move temp file with new name
-			$file_path = __DIR__ . '/file/' . $new_name[0] . '/' . $new_name[1] . '/';
-			if (!file_exists($file_path)) {
-				mkdir($file_path, 0777, true);
-			}
-			move_uploaded_file($files[$i]['tmp_name'], $file_path . $new_name);
-
-			// make thumbnail image
-			$thumb_path = __DIR__ . '/file/thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
-			if (!file_exists($thumb_path)) {
-				mkdir($thumb_path, 0777, true);
-			}
-			$this->create_thumbnail_image($file_path . $new_name, $thumb_path . $new_name, 420);
-
-			// save new name for response
-			$array_result[$i]['url'] = $new_name;
+			$this->upl($array_result[$i], $files[$i]['name'], $files[$i]['tmp_name'], $files[$i]['error']);
 		}
+
 		echo json_encode($array_result);
 	}
 
-	public function restruct_input_array($files_array, $files_count) {
+	protected function upl(&$array, $name, $temp_name, $is_error) {
+		$array['name'] = $name;
+
+		// get size and type
+		list($width, $height, $type) = getimagesize($temp_name);
+		$array['type'] = $type;
+		$array['size']['width'] = $width;
+		$array['size']['height'] = $height;
+		$array['size']['filesize'] = filesize($temp_name);
+
+		// error checking
+		$array['error']['upload'] = 0;
+		$array['error']['type'] = 0;
+		$array['error']['size'] = 0;
+
+		if ($is_error === 1) {
+			$array['error']['upload'] = 1;
+		}
+
+		if (!$this->is_support_type($type)) {
+			$array['error']['upload'] = 1;
+			$array['error']['type'] = 1;
+		}
+
+		if (!$this->is_support_size($array['size']['filesize'])) {
+			$array['error']['upload'] = 1;
+			$array['error']['size'] = 1;
+		}
+
+		if ($array['error']['upload'] == 1) {
+			return false;
+		}
+
+		// generate new name
+		$new_name = null;
+		
+		do {
+			$new_name = md5(microtime() . $name . $temp_name . rand(0, 9999)) . '.' . $this->_allowed_types[$type]['file_format'];
+		} while (file_exists(__DIR__ . '/file/' . $new_name));
+
+		// move temp file with new name
+		$file_path = __DIR__ . '/file/' . $new_name[0] . '/' . $new_name[1] . '/';
+		if (!file_exists($file_path)) {
+			mkdir($file_path, 0777, true);
+		}
+		copy($temp_name, $file_path . $new_name);
+		unlink($temp_name);
+
+		// make thumbnail image
+		$thumb_path = __DIR__ . '/file/thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
+		if (!file_exists($thumb_path)) {
+			mkdir($thumb_path, 0777, true);
+		}
+		$this->create_thumbnail_image($file_path . $new_name, $thumb_path . $new_name, 420);
+
+		// save new name for response
+		$array['url'] = $new_name;
+
+		return true;
+	}
+
+	private function restruct_input_array($files_array, $files_count) {
 		$result_array = array();
 		$file_keys = array_keys($files_array);
 
@@ -179,7 +137,7 @@ class Upload {
 		return $result_array;
 	}
 
-	public function is_support_size($size) {
+	private function is_support_size($size) {
 		$is_app_support_size = $size <= $this->return_bytes(self::MAX_FILE_SIZE);
 		$is_php_support_size = $size <= $this->return_bytes(ini_get('upload_max_filesize'));
 		$is_post_support_size = $size <= $this->return_bytes(ini_get('post_max_size'));
@@ -191,14 +149,14 @@ class Upload {
 		return true;
 	}
 
-	public function is_support_type($type) {
+	private function is_support_type($type) {
 		if (!isset($this->_allowed_types[$type])) {
 			return false;
 		}
 		return true;
 	}
 
-	public function create_thumbnail_image($src_path, $dest_path, $new_width) {
+	private function create_thumbnail_image($src_path, $dest_path, $new_width) {
 		list($width, $height, $type) = getimagesize($src_path);
 
 		if ($new_width > $width) {
@@ -210,7 +168,7 @@ class Upload {
 
 		$create_function = "imagecreatefrom" . $this->_allowed_types[$type]['function_postfix'];
 		$src_res = @$create_function($src_path);
-		if ($src_res === FALSE) {
+		if ($src_res === false) {
 			return;
 		}
 
@@ -225,7 +183,7 @@ class Upload {
 		imagedestroy($src_res);
 	}
 
-	public function return_bytes($val) {
+	private function return_bytes($val) {
 		$val = trim($val);
 		$last = strtolower($val[ strlen($val) - 1 ]);
 
