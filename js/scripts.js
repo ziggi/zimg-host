@@ -1,6 +1,7 @@
 $(function(){
 	var appLocation = window.location;
 
+	// links list
 	$('#btn-links').on('click', function() {
 		$('#overlay').fadeIn(150);
 		$('#links-menu').fadeIn(150);
@@ -26,6 +27,17 @@ $(function(){
 		$('#links-input').select();
 	});
 
+	// form upload
+	$('#btn-disc').on('click', function() {
+		$('#file-input').click();
+	});
+
+	$('#file-input').on('change', function() {
+		var formData = new FormData(document.querySelector("#form-input"));
+		uploadForm(formData);
+	});
+
+	// url upload
 	$('#btn-url').on('click', function() {
 		$('#overlay').fadeIn(150);
 		$('#url-menu').fadeIn(150);
@@ -40,28 +52,6 @@ $(function(){
 	$('#btn-url-close').on('click', function() {
 		$('#overlay').fadeOut(150);
 		$('#url-menu').fadeOut(150);
-	});
-
-	$('#btn-disc').on('click', function() {
-		$('#file-input').click();
-	});
-
-	$('#file-input').on('change', function() {
-		$('#form-input').ajaxForm({
-			beforeSend: function() {
-				$('.progress').css('display', 'block');
-				updatePercentValue(0);
-			},
-			uploadProgress: function(event, position, total, percentComplete) {
-				updatePercentValue(percentComplete);
-			},
-		    success: function() {
-		    	updatePercentValue(100);
-		    },
-			complete: function(xhr) {
-				addImagesFromArray(xhr.responseText);
-			}
-		}).submit();
 	});
 
 	$('#btn-url-upload').on('click', function() {
@@ -79,7 +69,26 @@ $(function(){
 			addImagesFromArray(data);
 		});
 	});
+
+	// file drop
+	$('html').on('dragover', function(event) {
+		event.preventDefault();  
+		event.stopPropagation();
+	});
+
+	$('html').on('drop', function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		var formData = new FormData();
+		for (var i = 0; i < event.originalEvent.dataTransfer.files.length; i++) {
+			formData.append("files[]", event.originalEvent.dataTransfer.files[i]);
+		}
+
+		uploadForm(formData);
+	});
 	
+	// functions
 	function addImagesFromArray(text) {
 		var result = JSON.parse(text);
 
@@ -133,37 +142,24 @@ $(function(){
 		}
 	}
 
-	function updatePercentValue(percent) {
-		$('.file-progress-bar').css('width', percent + '%');
-		$('.file-progress-percent').html(percent + '%');
-	}
-
-	// file drop
-	$('html').on('dragover', function(event) {
-		event.preventDefault();  
-		event.stopPropagation();
-	});
-
-	$('html').on('drop', function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-
-		$('.progress').css('display', 'block');
-		updatePercentValue(0);
-
-		var formData = new FormData();
-		for (var i = 0; i < event.originalEvent.dataTransfer.files.length; i++) {
-			formData.append("files[]", event.originalEvent.dataTransfer.files[i]);
-		}
-
+	function uploadForm(formData) {
 		var request = new XMLHttpRequest();
 		request.open("POST", "upload.php");
+
 		request.onload = function(event) {
 			addImagesFromArray(event.target.responseText);
 		};
+
 		request.upload.addEventListener('progress', function(event) {
-			updatePercentValue(event.loaded / event.total * 100);
+			updatePercentValue(parseInt(event.loaded / event.total * 100));
 		}, false);
+
 		request.send(formData);
-	});
+	}
+
+	function updatePercentValue(percent) {
+		$('.progress').css('display', 'block');
+		$('.file-progress-bar').css('width', percent + '%');
+		$('.file-progress-percent').html(percent + '%');
+	}
 });

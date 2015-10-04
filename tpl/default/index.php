@@ -72,7 +72,6 @@
 </div>
 
 <script type='text/javascript' src='js/jquery-2.1.1.min.js'></script>
-<script type='text/javascript' src='js/jquery.form.min.js'></script>
 <script type='text/javascript' src='js/scripts.js'></script>
 
 </body>
