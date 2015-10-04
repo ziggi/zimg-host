@@ -71,7 +71,6 @@
   <button class="btn pull-right" id="btn-links-close">Close</button>
 </div>
 
-<script type='text/javascript' src='js/jquery-2.1.1.min.js'></script>
 <script type='text/javascript' src='js/scripts.js'></script>
 
 </body>
