@@ -82,12 +82,14 @@ window.addEventListener('load', function() {
 	document.querySelector('html').addEventListener('drop', function(event) {
 		event.preventDefault();
 
-		var formData = new FormData();
-		for (var i = 0; i < event.dataTransfer.files.length; i++) {
-			formData.append("files[]", event.dataTransfer.files[i]);
-		}
+		if (event.dataTransfer.files > 0) {
+			var formData = new FormData();
+			for (var i = 0; i < event.dataTransfer.files.length; i++) {
+				formData.append("files[]", event.dataTransfer.files[i]);
+			}
 
-		uploadFiles(formData);
+			uploadFiles(formData);
+		}
 	});
 
 	// functions
