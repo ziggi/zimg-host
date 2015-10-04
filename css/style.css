@@ -1,3 +1,11 @@
+:focus {
+	outline: none;
+}
+
+::-moz-focus-inner {
+	border: 0;
+}
+
 body {
 	background: fixed url('../img/background.jpg');
 	background-size: cover;

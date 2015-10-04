@@ -29,7 +29,7 @@ window.addEventListener('load', function() {
 
 	// form upload
 	document.querySelector('#btn-disc').addEventListener('click', function() {
-		document.querySelector('#file-input').dispatchEvent(new Event('click'));
+		document.querySelector('#file-input').dispatchEvent(new MouseEvent('click'));
 	});
 
 	document.querySelector('#file-input').addEventListener('change', function() {
@@ -70,8 +70,8 @@ window.addEventListener('load', function() {
 
 		uploadFiles(params.slice(0, -1), true);
 
-		document.querySelector('#btn-url-clear').dispatchEvent(new Event('click'));
-		document.querySelector('#btn-url-close').dispatchEvent(new Event('click'));
+		document.querySelector('#btn-url-clear').dispatchEvent(new MouseEvent('click'));
+		document.querySelector('#btn-url-close').dispatchEvent(new MouseEvent('click'));
 	});
 
 	// file drop
