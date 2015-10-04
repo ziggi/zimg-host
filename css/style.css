@@ -197,13 +197,16 @@ select option {
 }
 
 .file-item input {
-	width: 220px;
+	width: 230px;
 	padding: 3px;
 	outline: none;
 	color: #bbb;
 	background: #3a3a3a;
 	border: 1px solid #202020;
 	border-radius: 3px;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
 	-webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 	   -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 	     -o-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -277,6 +280,9 @@ select option {
 		min-width: 270px;
 	}
 	.file-item img {
+		width: 100%;
+	}
+	.file-item input {
 		width: 100%;
 	}
 }
