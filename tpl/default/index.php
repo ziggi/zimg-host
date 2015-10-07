@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -71,7 +71,8 @@
   <button class="btn pull-right" id="btn-links-close">Close</button>
 </div>
 
-<script type='text/javascript' src='js/scripts.js'></script>
+<script src="<?=$conf['uri']?>/js/scripts.js"></script>
+<script src="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/scripts.js"></script>
 
 </body>
 

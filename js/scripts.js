@@ -1,79 +1,6 @@
 window.addEventListener('load', function() {
 	var appLocation = window.location;
 
-	// links list
-	document.querySelector('#btn-links').addEventListener('mousedown', function() {
-		document.querySelector('#overlay').style.display = 'block';
-		document.querySelector('#links-menu').style.display = 'block';
-		document.querySelector('#links-menu select').dispatchEvent(new Event('change'));
-		document.querySelector('#links-input').select();
-	});
-
-	document.querySelector('#btn-links-close').addEventListener('mousedown', function() {
-		document.querySelector('#overlay').style.display = 'none';
-		document.querySelector('#links-menu').style.display = 'none';
-	});
-
-	document.querySelector('#links-menu select').addEventListener('change', function() {
-		var target = this.options[this.selectedIndex].dataset.target;
-
-		var text = '';
-
-		[].forEach.call(document.querySelectorAll('.' + target), function(element) {
-			text += element.value + '\n';
-		});
-
-		document.querySelector('#links-input').value = text;
-		document.querySelector('#links-input').select();
-	});
-
-	// form upload
-	document.querySelector('#btn-disc').addEventListener('click', function() {
-		document.querySelector('#file-input').dispatchEvent(new MouseEvent('click'));
-	});
-
-	document.querySelector('#file-input').addEventListener('change', function() {
-		var formData = new FormData(document.querySelector('#form-input'));
-		uploadFiles(formData);
-	});
-
-	// url upload
-	document.querySelector('#btn-url').addEventListener('click', function() {
-		document.querySelector('#overlay').style.display = 'block';
-		document.querySelector('#url-menu').style.display = 'block';
-		document.querySelector('#url-menu textarea').focus();
-	});
-
-	document.querySelector('#btn-url-clear').addEventListener('click', function() {
-		document.querySelector('#url-menu textarea').value = '';
-		document.querySelector('#url-menu textarea').focus();
-	});
-
-	document.querySelector('#btn-url-close').addEventListener('click', function() {
-		document.querySelector('#overlay').style.display = 'none';
-		document.querySelector('#url-menu').style.display = 'none';
-	});
-
-	document.querySelector('#btn-url-upload').addEventListener('click', function() {
-		var inputValue = document.querySelector('#url-input').value;
-		if (inputValue.length == 0) {
-			document.querySelector('#url-menu textarea').focus();
-			return;
-		}
-
-		var params = '';
-		var inputArray = inputValue.split('\n');
-
-		for (var i in inputArray) {
-			params += 'urls[]=' + inputArray[i] + '&';
-		}
-
-		uploadFiles(params.slice(0, -1), true);
-
-		document.querySelector('#btn-url-clear').dispatchEvent(new MouseEvent('click'));
-		document.querySelector('#btn-url-close').dispatchEvent(new MouseEvent('click'));
-	});
-
 	// file drop
 	document.querySelector('html').addEventListener('dragover', function(event) {
 		event.preventDefault();
@@ -82,13 +9,13 @@ window.addEventListener('load', function() {
 	document.querySelector('html').addEventListener('drop', function(event) {
 		event.preventDefault();
 
-		if (event.dataTransfer.files > 0) {
+		if (event.dataTransfer.files.length > 0) {
 			var formData = new FormData();
 			for (var i = 0; i < event.dataTransfer.files.length; i++) {
 				formData.append("files[]", event.dataTransfer.files[i]);
 			}
 
-			uploadFiles(formData);
+			window.uploadFiles(formData);
 		}
 	});
 
@@ -128,7 +55,7 @@ window.addEventListener('load', function() {
 				request.open('POST', 'file_item_error.php');
 
 				request.onload = function(event) {
-					document.querySelector('#file-list').innerHTML += event.target.responseText;
+					window.addError(event.target.responseText);
 				};
 
 				request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -145,11 +72,7 @@ window.addEventListener('load', function() {
 			request.open('POST', 'file_item.php');
 
 			request.onload = function(event) {
-				document.querySelector('#file-list').innerHTML += event.target.responseText;
-
-				if (document.querySelectorAll('.file-item').length > 1) {
-					document.querySelector('#get-all-link').style.display = 'block';
-				}
+				window.addImage(event.target.responseText);
 			};
 
 			request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -157,7 +80,7 @@ window.addEventListener('load', function() {
 		}
 	}
 
-	function uploadFiles(data, url) {
+	window.uploadFiles = function(data, url) {
 		var request = new XMLHttpRequest();
 		request.open('POST', 'upload.php');
 
@@ -166,7 +89,7 @@ window.addEventListener('load', function() {
 		};
 
 		request.upload.addEventListener('progress', function(event) {
-			updatePercentValue(parseInt(event.loaded / event.total * 100));
+			window.updatePercentValue(parseInt(event.loaded / event.total * 100));
 		}, false);
 
 		if (url) {
@@ -174,11 +97,5 @@ window.addEventListener('load', function() {
 		}
 
 		request.send(data);
-	}
-
-	function updatePercentValue(percent) {
-		document.querySelector('.progress').style.display = 'block';
-		document.querySelector('.file-progress-bar').style.width = percent + '%';
-		document.querySelector('.file-progress-percent').innerHTML = percent + '%';
 	}
 });
