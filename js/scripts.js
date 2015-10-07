@@ -76,7 +76,12 @@ window.addEventListener('load', function() {
 			};
 
 			request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			request.send('url=' + fileUrl + '&' + 'thumbUrl=' + fileThumbnailUrl + '&name=' + fileName + '&size=' + fileSize);
+			request.send('url=' + fileUrl + '&' +
+			             'thumbUrl=' + fileThumbnailUrl + '&' +
+			             'name=' + fileName + '&' +
+			             'size[width]=' + fileSize.width + '&' +
+			             'size[height]=' + fileSize.height + '&' +
+			             'size[filesize]=' + fileSize.filesize);
 		}
 	}
 
