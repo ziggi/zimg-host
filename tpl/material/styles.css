@@ -1,0 +1,42 @@
+.image-card.mdl-card {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100px;
+}
+.image-card img {
+  width: 100%;
+}
+.image-card .mdl-textfield {
+  width: 100%;
+  padding: 0;
+}
+.image-card .mdl-card__media {
+  background-color: #fff;
+}
+
+.info-card.mdl-card {
+  width: 100%;
+  max-width: 420px;
+}
+.info-card .mdl-textfield {
+  width: 100%;
+  margin-top: -20px;
+}
+
+#btn-url-upload {
+  float: right;
+}
+#credits {
+  padding: 0 10px;
+}
+#credits a {
+  padding: 0 5px;
+}
+#form-input {
+  display: none;
+}
+#progress {
+  position: absolute;
+  display: none;
+  width: 100%;
+}
