@@ -7,8 +7,8 @@
   <meta name="keywords" content="image host, zimg-host">
   <meta name="viewport" content="width=device-width">
   <title>zimg-host - Simple image hosting service</title>
-  <link rel="shortcut icon" type="image/x-icon" href="<?=$conf['uri']?>/img/favicon.ico">
-  <link rel="stylesheet" type="text/css" href="<?=$conf['uri']?>/css/style.css">
+  <link rel="shortcut icon" type="image/x-icon" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/style.css">
 </head>
 
 <body>
