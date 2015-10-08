@@ -72,6 +72,7 @@ window.addEventListener('load', function() {
 		document.querySelector('#btn-url-close').dispatchEvent(new MouseEvent('click'));
 	});
 
+	// functions
 	window.addError = function(value) {
 		document.querySelector('#file-list').insertAdjacentHTML('beforeend', value);
 	}

@@ -27,40 +27,7 @@ window.addEventListener('load', function() {
 			var fileName = result[i].name;
 
 			if (result[i].error.upload == 1) {
-				var errorTypeText = 'Reason: ';
-
-				if (result[i].error.type == 1) {
-					errorTypeText += 'bad type';
-					errorTypeText += ', ';
-				}
-
-				if (result[i].error.size == 1) {
-					errorTypeText += 'bad size';
-					errorTypeText += ', ';
-				}
-
-				if (result[i].error.host == 1) {
-					errorTypeText += 'this host is blacklisted';
-					errorTypeText += ', ';
-				}
-
-				if (result[i].error.type == 0 && result[i].error.size == 0 && result[i].error.host == 0) {
-					errorTypeText = 'server error';
-					errorTypeText += ', ';
-				}
-
-				errorTypeText = errorTypeText.slice(0, -2) + '.';
-
-				var request = new XMLHttpRequest();
-				request.open('POST', 'file_item_error.php');
-
-				request.onload = function(event) {
-					window.addError(event.target.responseText);
-				};
-
-				request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-				request.send('name=' + fileName + '&' + 'error=' + errorTypeText);
-
+				showErrorMessage(fileName, getErrorMessage(result[i].error));
 				continue;
 			}
 
@@ -86,6 +53,52 @@ window.addEventListener('load', function() {
 	}
 
 	window.uploadFiles = function(data, url) {
+		if (typeof data.getAll === 'function' && !url) {
+			var files = data.getAll('files[]');
+
+			var request = new XMLHttpRequest();
+			request.open('POST', 'validate.php');
+
+			request.onload = function(event) {
+				var result = JSON.parse(event.target.responseText);
+
+				// show error messages and remove wrong items
+				var i = result.length;
+
+				while (i--) {
+					var fileName = result[i].name;
+
+					if (result[i].error.upload == 1) {
+						showErrorMessage(fileName, getErrorMessage(result[i].error));
+						result.splice(i, 1);
+					}
+				}
+
+				// make new FormData without wrong items
+				var newData = new FormData();
+
+				for (i in files) {
+					for (j in result) {
+						if (result[j].name === files[i].name) {
+							newData.append('files[]', files[i]);
+						}
+					}
+				}
+
+				// upload
+				if (newData.getAll('files[]').length > 0) {
+					upload(newData, url);
+				}
+			}
+
+			request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			request.send('files=' + JSON.stringify(files, ['name', 'size', 'type']));
+		} else {
+			upload(data, url);
+		}
+	}
+
+	function upload(data, url) {
 		var request = new XMLHttpRequest();
 		request.open('POST', 'upload.php');
 
@@ -102,5 +115,41 @@ window.addEventListener('load', function() {
 		}
 
 		request.send(data);
+	}
+
+	function showErrorMessage(fileName, errorTypeText) {
+		var request = new XMLHttpRequest();
+		request.open('POST', 'file_item_error.php');
+
+		request.onload = function(event) {
+			window.addError(event.target.responseText);
+		};
+
+		request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		request.send('name=' + fileName + '&' + 'error=' + errorTypeText);
+	}
+
+	function getErrorMessage(error) {
+		var errorTypeText = 'Reason: ';
+
+		if (error.type == 1) {
+			errorTypeText += 'bad type, ';
+		}
+
+		if (error.size == 1) {
+			errorTypeText += 'bad size, ';
+		}
+
+		if (error.host == 1) {
+			errorTypeText += 'this host is blacklisted, ';
+		}
+
+		if (error.type == 0 && error.size == 0 && error.host == 0) {
+			errorTypeText = 'server error, ';
+		}
+
+		errorTypeText = errorTypeText.slice(0, -2) + '.';
+
+		return errorTypeText;
 	}
 });

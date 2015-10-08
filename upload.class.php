@@ -225,7 +225,7 @@ class Upload {
 	 *
 	 * @return bool
 	 */
-	private function is_support_size($size) {
+	public function is_support_size($size) {
 		$is_app_support_size = $size <= $this->return_bytes(self::MAX_FILE_SIZE);
 		$is_php_support_size = $size <= $this->return_bytes(ini_get('upload_max_filesize'));
 		$is_post_support_size = $size <= $this->return_bytes(ini_get('post_max_size'));
@@ -244,7 +244,7 @@ class Upload {
 	 *
 	 * @return bool
 	 */
-	private function is_support_type($type) {
+	public function is_support_type($type) {
 		if (!isset($this->_allowed_types[$type])) {
 			return false;
 		}

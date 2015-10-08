@@ -28,6 +28,7 @@ window.addEventListener('load', function() {
 		document.querySelector('#url-input').value = '';
 	});
 
+	// functions
 	window.addError = function(value) {
 		document.querySelector('#main-grid').insertAdjacentHTML('beforeend', value);
 	}
