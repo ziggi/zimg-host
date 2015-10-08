@@ -36,7 +36,8 @@
   display: none;
 }
 #progress {
-  position: absolute;
+  position: fixed;
+  z-index: 900;
   display: none;
   width: 100%;
 }
