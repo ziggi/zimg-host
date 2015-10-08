@@ -6,7 +6,7 @@
     <meta name="keywords" content="image host, zimg-host">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>zimg-host - Simple image hosting service</title>
-    <link rel="shortcut icon" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/img/favicon.png" />
+    <link rel="shortcut icon" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/img/favicon.ico" />
     <link href='//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/material.min.css">
