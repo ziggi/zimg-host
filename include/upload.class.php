@@ -30,6 +30,9 @@ class Upload {
 			'length' => 8
 		);
 
+	/** @var string Upload file dir */
+	const UPLOAD_FILE_DIR = __DIR__ . '/../file/';
+
 	/** @var string Maximum file size */
 	const MAX_FILE_SIZE = '2M';
 
@@ -140,10 +143,10 @@ class Upload {
 		
 		do {
 			$new_name = $this->get_random_name() . '.' . $this->_allowed_types[$type]['file_format'];
-		} while (file_exists(__DIR__ . '/file/' . $new_name));
+		} while (file_exists(self::UPLOAD_FILE_DIR . $new_name));
 
 		// move temp file with new name
-		$file_path = __DIR__ . '/file/' . $new_name[0] . '/' . $new_name[1] . '/';
+		$file_path = self::UPLOAD_FILE_DIR . $new_name[0] . '/' . $new_name[1] . '/';
 		if (!file_exists($file_path)) {
 			mkdir($file_path, 0777, true);
 		}
@@ -151,7 +154,7 @@ class Upload {
 		unlink($temp_name);
 
 		// make thumbnail image
-		$thumb_path = __DIR__ . '/file/thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
+		$thumb_path = self::UPLOAD_FILE_DIR . 'thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
 		if (!file_exists($thumb_path)) {
 			mkdir($thumb_path, 0777, true);
 		}

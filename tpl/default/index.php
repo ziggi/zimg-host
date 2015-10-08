@@ -7,8 +7,8 @@
   <meta name="keywords" content="image host, zimg-host">
   <meta name="viewport" content="width=device-width">
   <title>zimg-host - Simple image hosting service</title>
-  <link rel="shortcut icon" type="image/x-icon" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/favicon.ico">
-  <link rel="stylesheet" type="text/css" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/style.css">
+  <link rel="shortcut icon" type="image/x-icon" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/img/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/css/style.css">
 </head>
 
 <body>
@@ -72,7 +72,7 @@
 </div>
 
 <script src="<?=$conf['uri']?>/js/scripts.js"></script>
-<script src="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/scripts.js"></script>
+<script src="<?=$conf['uri']?>/tpl/<?=$conf['tpl']?>/js/scripts.js"></script>
 
 </body>
 

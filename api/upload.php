@@ -1,6 +1,6 @@
 <?php
 
-include 'upload.class.php';
+include '../include/upload.class.php';
 
 // access for remote uploads
 header('Access-Control-Allow-Origin: *');

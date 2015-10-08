@@ -36,7 +36,7 @@ window.addEventListener('load', function() {
 			var fileSize = result[i].size;
 
 			var request = new XMLHttpRequest();
-			request.open('POST', 'file_item.php');
+			request.open('POST', 'api/file_item.php');
 
 			request.onload = function(event) {
 				window.addImage(event.target.responseText);
@@ -57,7 +57,7 @@ window.addEventListener('load', function() {
 			var files = data.getAll('files[]');
 
 			var request = new XMLHttpRequest();
-			request.open('POST', 'validate.php');
+			request.open('POST', 'api/validate.php');
 
 			request.onload = function(event) {
 				var result = JSON.parse(event.target.responseText);
@@ -100,7 +100,7 @@ window.addEventListener('load', function() {
 
 	function upload(data, url) {
 		var request = new XMLHttpRequest();
-		request.open('POST', 'upload.php');
+		request.open('POST', 'api/upload.php');
 
 		request.onload = function(event) {
 			addImagesFromArray(event.target.responseText);
@@ -119,7 +119,7 @@ window.addEventListener('load', function() {
 
 	function showErrorMessage(fileName, errorTypeText) {
 		var request = new XMLHttpRequest();
-		request.open('POST', 'file_item_error.php');
+		request.open('POST', 'api/file_item_error.php');
 
 		request.onload = function(event) {
 			window.addError(event.target.responseText);
