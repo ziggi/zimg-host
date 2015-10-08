@@ -9,7 +9,8 @@ header('Access-Control-Allow-Origin: *');
 $upload = new Upload();
 
 $array_result = array();
-$files = json_decode($_POST['files'], true);
+
+$files = json_decode(stripslashes($_POST['files']), true);
 
 foreach ($files as $file) {
 	$array = array();
