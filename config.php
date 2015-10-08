@@ -2,7 +2,13 @@
 
 return array(
 	// version
-	'version' => '2.1.4',
+	'version' => ($version = '2.1.4'),
+	// description
+	'description' => 'Simple image hosting service',
+	// keywords
+	'keywords' => 'image host, zimg-host',
+	// title
+	'title' => 'zimg-host v' . $version . ' - Simple image hosting service',
 	// template folder name under /tpl
 	'tpl' => 'material',
 	// uri addres to site
