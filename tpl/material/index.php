@@ -38,7 +38,7 @@
                   <input type="file" name="files[]" id="file-input" multiple>
                 </form>
                 <button class="mdl-button mdl-js-button mdl-button--raised" id="btn-disc">
-                  <i class="material-icons">file_upload</i>disc
+                  <i class="material-icons">file_upload</i>file
                 </button>
               </div>
             </div>
