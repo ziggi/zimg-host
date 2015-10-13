@@ -56,6 +56,8 @@ example of result string (formatted for readability):
 ```
 # Config for nginx
 Some examples:
-        location / {
-                        try_files $uri $uri/ /index.php?$args;
-                }
+```
+location / {
+	try_files $uri $uri/ /index.php?$args;
+}
+```
