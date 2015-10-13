@@ -31,7 +31,7 @@ class Upload {
 		);
 
 	/** @var string Upload file dir */
-	public static $upload_file_dir;
+	public static $upload_tmp_dir;
 
 	/** @var string Maximum file size */
 	const MAX_FILE_SIZE = '2M';
