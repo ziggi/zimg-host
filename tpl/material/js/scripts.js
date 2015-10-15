@@ -5,8 +5,12 @@ window.addEventListener('load', function() {
 	});
 
 	document.querySelector('#file-input').addEventListener('change', function() {
-		var formData = new FormData(document.querySelector('#form-input'));
+		var form = document.querySelector('#form-input');
+
+		var formData = new FormData(form);
 		window.uploadFiles(formData);
+
+		form.reset();
 	});
 
 	// url upload
