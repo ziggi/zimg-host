@@ -115,22 +115,21 @@ class Upload {
 	 * @return bool true if image has been uploaded, false if not
 	 */
 	protected function upload_handling(&$array, $name, $temp_name, $is_error) {
-		$array['name'] = $name;
-
-		// get size and type
-		list($width, $height, $type) = getimagesize($temp_name);
-		$array['type'] = $type;
-		$array['size']['width'] = $width;
-		$array['size']['height'] = $height;
-		$array['size']['filesize'] = filesize($temp_name);
-
 		// error checking
 		$array['error']['upload'] = 0;
 		$array['error']['type'] = 0;
 		$array['error']['size'] = 0;
 
-		if ($is_error === 1) {
+		if ($is_error !== UPLOAD_ERR_OK) {
 			$array['error']['upload'] = 1;
+		} else {
+			$array['name'] = $name;
+			// get size and type
+			list($width, $height, $type) = getimagesize($temp_name);
+			$array['type'] = $type;
+			$array['size']['width'] = $width;
+			$array['size']['height'] = $height;
+			$array['size']['filesize'] = filesize($temp_name);
 		}
 
 		if (!$this->is_support_type($type)) {
