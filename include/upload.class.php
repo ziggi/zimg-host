@@ -42,7 +42,7 @@ class Upload {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->upload_file_dir = __DIR__ . '/../file/';
+		self::$upload_file_dir = __DIR__ . '/../file/';
 	}
 
 	/**
@@ -149,13 +149,13 @@ class Upload {
 
 		// generate new name
 		$new_name = null;
-		
+
 		do {
 			$new_name = $this->get_random_name() . '.' . $this->_allowed_types[$type]['file_format'];
-		} while (file_exists($this->upload_file_dir . $new_name));
+		} while (file_exists(self::$upload_file_dir . $new_name));
 
 		// move temp file with new name
-		$file_path = $this->upload_file_dir . $new_name[0] . '/' . $new_name[1] . '/';
+		$file_path = self::$upload_file_dir . $new_name[0] . '/' . $new_name[1] . '/';
 		if (!file_exists($file_path)) {
 			mkdir($file_path, 0777, true);
 		}
@@ -163,7 +163,7 @@ class Upload {
 		unlink($temp_name);
 
 		// make thumbnail image
-		$thumb_path = $this->upload_file_dir . 'thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
+		$thumb_path = self::$upload_file_dir . 'thumb/' . $new_name[0] . '/' . $new_name[1] . '/';
 		if (!file_exists($thumb_path)) {
 			mkdir($thumb_path, 0777, true);
 		}
@@ -203,10 +203,10 @@ class Upload {
 		$dest_res = imagecreatetruecolor($new_width, $new_height);
 
 		imagecopyresampled($dest_res, $src_res, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-		
+
 		$create_function = "image" . $this->_allowed_types[$type]['function_postfix'];
 		$create_function($dest_res, $dest_path);
-		
+
 		imagedestroy($dest_res);
 		imagedestroy($src_res);
 	}
@@ -226,7 +226,7 @@ class Upload {
 		for ($i = 0; $i < $length; $i++) {
 			$result_str .= $base[ mt_rand(0, $max) ];
 		}
-		
+
 		return $result_str;
 	}
 
