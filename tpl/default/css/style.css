@@ -7,7 +7,7 @@
 }
 
 body {
-	background: fixed url('img/background.jpg');
+	background: fixed url('../img/background.jpg');
 	background-size: cover;
 	font-family: Arial, sans-serif;
 	margin: 0;
@@ -76,7 +76,7 @@ select option {
 
 #content {
 	padding: 10px;
-	background: url('img/op_bg.png');
+	background: url('../img/op_bg.png');
 	border: 1px solid #6d6d6d;
 	border-radius: 10px;
 	-webkit-box-sizing: border-box;
@@ -353,7 +353,7 @@ select option {
 	   -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 	     -o-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 	        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-} 
+}
 
 .btn:hover {
 	color: #eee;
