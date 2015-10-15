@@ -139,7 +139,7 @@ select option {
 	margin: auto;
 	width: 460px;
 	padding: 10px;
-	background: url('img/op_bg.png');
+	background: url('../img/op_bg.png');
 	border: 1px solid #6d6d6d;
 	border-radius: 10px;
 	-webkit-box-sizing: border-box;
