@@ -122,6 +122,7 @@ class Upload {
 
 		if ($is_error !== UPLOAD_ERR_OK) {
 			$array['error']['upload'] = 1;
+			return false;
 		} else {
 			$array['name'] = $name;
 			// get size and type
