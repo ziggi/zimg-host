@@ -10,10 +10,10 @@ http://img.ziggi.org/
 
 Some examples:
 ```
-curl -F files[]=@image.jpg http://img.ziggi.org/upload.php
-curl -F files[]=@image1.jpg -F files[]=@image2.jpg http://img.ziggi.org/upload.php
-curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 http://img.ziggi.org/upload.php
-curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 -F urls[]=http://i.imgur.com/hdsdwsS.jpg?1 http://img.ziggi.org/upload.php
+curl -F files[]=@image.jpg http://img.ziggi.org/api/upload.php
+curl -F files[]=@image1.jpg -F files[]=@image2.jpg http://img.ziggi.org/api/upload.php
+curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 http://img.ziggi.org/api/upload.php
+curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 -F urls[]=http://i.imgur.com/hdsdwsS.jpg?1 http://img.ziggi.org/api/upload.php
 ```
 example of result string (formatted for readability):
 ```json
