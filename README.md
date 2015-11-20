@@ -6,7 +6,29 @@ Simple image hosting service
 
 http://img.ziggi.org/
 
+# Backend requirement
+
+- PHP >= 5.3.0
+- GD extension
+
+# Installation
+
+- Copy files into your website directory (subdirectories are supported)
+- Change config.php if you need
+- Make sure that the file/ directory is writable by web server
+
+# Config for nginx
+
+If you are using nginx instead Apache, this configuration example can be useful to you:
+```
+location / {
+	try_files $uri $uri/ /index.php?$args;
+}
+```
+
 # Usage in CURL
+
+You can upload images using CURL.
 
 Some examples:
 ```
@@ -15,6 +37,7 @@ curl -F files[]=@image1.jpg -F files[]=@image2.jpg http://img.ziggi.org/api/uplo
 curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 http://img.ziggi.org/api/upload.php
 curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 -F urls[]=http://i.imgur.com/hdsdwsS.jpg?1 http://img.ziggi.org/api/upload.php
 ```
+
 example of result string (formatted for readability):
 ```json
 [
@@ -53,11 +76,4 @@ example of result string (formatted for readability):
 		"url":"f05b3f3eb1fa61431a7dddca9b4351fc.jpg"
 	}
 ]
-```
-# Config for nginx
-Some examples:
-```
-location / {
-	try_files $uri $uri/ /index.php?$args;
-}
 ```
