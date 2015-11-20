@@ -4,11 +4,11 @@ return array(
 	// version
 	'version' => ($version = '3.0.1'),
 	// description
-	'description' => 'Simple image hosting service',
+	'description' => ($description = 'Simple image hosting service'),
 	// keywords
 	'keywords' => 'image host, zimg-host',
 	// title
-	'title' => 'zimg-host v' . $version . ' - Simple image hosting service',
+	'title' => 'zimg-host v' . $version . ' - ' . $description,
 	// template folder name under /tpl
 	'tpl' => 'material',
 	// uri addres to site
