@@ -88,10 +88,6 @@ class Upload {
 	 * @return void
 	 */
 	public function upload_files(array $files_array) {
-		if (!is_array($files_array)) {
-			return;
-		}
-
 		$files_count = count($files_array['name']);
 		$files = $this->restruct_input_array($files_array, $files_count);
 

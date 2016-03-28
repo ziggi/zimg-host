@@ -9,7 +9,11 @@ header('Access-Control-Allow-Origin: *');
 $upload = new Upload();
 
 if (isset($_POST['urls'])) {
-	$upload->upload_urls($_POST['urls']);
-} else {
-	$upload->upload_files($_FILES['files']);
+	if (is_array($_POST['urls'])) {
+		$upload->upload_urls($_POST['urls']);
+	}
+} else if (isset($_FILES['files'])) {
+	if (is_array($_FILES['files'])) {
+		$upload->upload_files($_FILES['files']);
+	}
 }
