@@ -2,7 +2,7 @@
 
 return array(
 	// version
-	'version' => ($version = '3.0.1'),
+	'version' => ($version = '3.0.2'),
 	// description
 	'description' => ($description = 'Simple image hosting service'),
 	// keywords
