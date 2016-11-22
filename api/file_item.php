@@ -9,4 +9,4 @@ $width = htmlentities($_POST['size']['width'], null, 'UTF-8');
 $height = htmlentities($_POST['size']['height'], null, 'UTF-8');
 $filesize = round($_POST['size']['filesize'] / 1024, 2);
 
-include sprintf('../tpl/%s/%s.php', $conf['tpl'], pathinfo(__FILE__, PATHINFO_FILENAME));
+include $conf['tpl_path'] . 'file_item.php';

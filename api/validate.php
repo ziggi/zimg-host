@@ -5,6 +5,12 @@ include '../include/upload.class.php';
 // access for remote checks
 header('Access-Control-Allow-Origin: *');
 
+// check access
+session_start();
+if (!isset($_SESSION['password_accepted'])) {
+	exit('no access');
+}
+
 // check files
 $upload = new Upload();
 

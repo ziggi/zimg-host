@@ -23,6 +23,9 @@
   margin-top: -20px;
 }
 
+#btn-unlock {
+  float: right;
+}
 #btn-url-upload {
   float: right;
 }
