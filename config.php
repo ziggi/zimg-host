@@ -4,7 +4,7 @@ $uri_parts = explode('/', $_SERVER['PHP_SELF']);
 
 return array(
 	// version
-	'version' => ($version = '3.0.2'),
+	'version' => ($version = '4.0.0'),
 	// upload password
 	'password' => 'test',
 	// description

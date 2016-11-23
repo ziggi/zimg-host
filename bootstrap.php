@@ -1,7 +1,6 @@
 <?php
 
-session_start();
-
+include 'include/functions.php';
 include 'include/upload.class.php';
 $conf = include 'config.php';
 $tpl = array();
@@ -18,7 +17,7 @@ $is_valid_file = preg_match('/^[' . $base . ']{' . $length . '}\.[a-z]+$/', $fil
 if (!$is_valid_file) {
 	if (!empty($conf['password'])) {
 		// check password
-		if (!isset($_SESSION['password_accepted'])) {
+		if (!isHaveAccess()) {
 			if (isset($_GET['badpassword'])) {
 				$tpl['message'] = 'Password is incorrect';
 			}

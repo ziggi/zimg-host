@@ -1,13 +1,9 @@
 <?php
 
 include '../include/functions.php';
-
 $conf = include '../config.php';
-$tpl = array();
 
-$password = htmlentities($_POST['password'], null, 'UTF-8');
-
-if ($password !== $conf['password']) {
+if (!isHaveAccess()) {
 	header('Location: ' . $conf['uri'] . '?badpassword');
 } else {
 	session_start();

@@ -1,13 +1,13 @@
 <?php
 
 include '../include/upload.class.php';
+include '../include/functions.php';
 
 // access for remote checks
 header('Access-Control-Allow-Origin: *');
 
 // check access
-session_start();
-if (!isset($_SESSION['password_accepted'])) {
+if (!isHaveAccess()) {
 	exit('no access');
 }
 

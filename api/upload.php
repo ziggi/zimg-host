@@ -1,13 +1,15 @@
 <?php
 
 include '../include/upload.class.php';
+include '../include/functions.php';
+
+$conf = include '../config.php';
 
 // access for remote uploads
 header('Access-Control-Allow-Origin: *');
 
 // check access
-session_start();
-if (!isset($_SESSION['password_accepted'])) {
+if (!isHaveAccess()) {
 	exit('no access');
 }
 
