@@ -2,6 +2,10 @@
 
 $uri_parts = explode('/', $_SERVER['PHP_SELF']);
 
+if (is_file($uri_parts[1])) {
+	$uri_parts[1] = '';
+}
+
 return array(
 	// version
 	'version' => ($version = '4.0.0'),
