@@ -204,7 +204,19 @@ select option {
 	max-width: 420px;
 }
 
-.file-item input {
+#content p {
+	margin: 5px 0;
+}
+
+#password {
+	width: 100%;
+}
+
+#btn-unlock {
+    margin: 10px auto 0;
+}
+
+input, .inpt {
 	width: 230px;
 	padding: 3px;
 	outline: none;

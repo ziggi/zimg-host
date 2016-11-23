@@ -10,7 +10,7 @@ return array(
 	// version
 	'version' => ($version = '4.0.0'),
 	// upload password
-	'password' => 'test',
+	'password' => '',
 	// description
 	'description' => ($description = 'Simple image hosting service'),
 	// keywords
