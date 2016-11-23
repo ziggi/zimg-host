@@ -38,6 +38,11 @@ curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 http://img.ziggi.org/api/upload.
 curl -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 -F urls[]=http://i.imgur.com/hdsdwsS.jpg?1 http://img.ziggi.org/api/upload.php
 ```
 
+Password protect upload:
+```
+curl -u whatever:YOUR_PASSWORD -F urls[]=http://i.imgur.com/VCcArdF.jpg?1 http://img.ziggi.org/api/upload.php
+```
+
 example of result string (formatted for readability):
 ```json
 [
@@ -56,7 +61,7 @@ example of result string (formatted for readability):
 			"type":0,
 			"size":0
 		},
-		"url":"ccc762c11f336cfa9fdbcc1b7ea4c1a3.jpg"
+		"url":"mijhmyhS.jpg"
 	},
 	{
 		"name":"image2.jpg",
@@ -73,7 +78,7 @@ example of result string (formatted for readability):
 			"type":0,
 			"size":0
 		},
-		"url":"f05b3f3eb1fa61431a7dddca9b4351fc.jpg"
+		"url":"GyDIPAGC.jpg"
 	}
 ]
 ```
