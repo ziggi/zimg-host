@@ -16,22 +16,26 @@ $upload = new Upload();
 
 $array_result = array();
 
-$files = json_decode(stripslashes($_POST['files']), true);
+$files = isset($_POST['files']) && is_string($_POST['files']) ? json_decode(stripslashes($_POST['files']), true) : null;
+
+if (!is_array($files)) {
+	$files = array();
+}
 
 foreach ($files as $file) {
 	$array = array();
-	$array['name'] = $file['name'];
-	
+	$array['name'] = $file['name'] ?? '';
+
 	$array['error']['upload'] = 0;
 	$array['error']['type'] = 0;
 	$array['error']['size'] = 0;
 
-	if (!$upload->is_support_size($file['size'])) {
+	if (!$upload->is_support_size($file['size'] ?? false)) {
 		$array['error']['upload'] = 1;
 		$array['error']['size'] = 1;
 	}
 
-	if (!$upload->is_support_type(mime_type_to_image_type($file['type']))) {
+	if (!$upload->is_support_type(mime_type_to_image_type($file['type'] ?? ''))) {
 		$array['error']['upload'] = 1;
 		$array['error']['type'] = 1;
 	}

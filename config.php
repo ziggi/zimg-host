@@ -1,6 +1,7 @@
 <?php
 
-$uri_parts = explode('/', $_SERVER['PHP_SELF']);
+$uri_parts = explode('/', $_SERVER['PHP_SELF'] ?? '');
+$uri_parts[1] = $uri_parts[1] ?? '';
 
 if (is_file($uri_parts[1])) {
 	$uri_parts[1] = '';
@@ -22,7 +23,7 @@ return array(
 	// template folder path
 	'tpl_path' => dirname(__FILE__) . '/tpl/' . $tpl . '/',
 	// uri addres to site
-	'uri' => '//' . preg_replace('#/$#', '', $_SERVER['SERVER_NAME'] . '/' . $uri_parts[1]),
+	'uri' => '//' . preg_replace('#/$#', '', ($_SERVER['SERVER_NAME'] ?? '') . '/' . $uri_parts[1]),
 	// params
-	'uri_param' => preg_replace('#^' . dirname($_SERVER['PHP_SELF']) . '/?#', '', $_SERVER['REQUEST_URI'], 1),
+	'uri_param' => (string)preg_replace('#^' . dirname($_SERVER['PHP_SELF'] ?? '') . '/?#', '', $_SERVER['REQUEST_URI'] ?? '', 1),
 );

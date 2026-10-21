@@ -36,14 +36,16 @@ if (empty($conf['uri_param'])) {
 	return;
 }
 
-if ($is_thumb) {
-	$file_path = 'file/thumb/' . $file_name[0] . '/' . $file_name[1] . '/' . $file_name;
-} else {
-	$file_path = 'file/' . $file_name[0] . '/' . $file_name[1] . '/' . $file_name;
+$file_path = '';
+
+if ($is_valid_file) {
+	$file_dir = $is_thumb ? 'file/thumb/' : 'file/';
+	$file_path = $file_dir . $file_name[0] . '/' . $file_name[1] . '/' . $file_name;
 }
 
-if (file_exists($file_path)) {
-	$img_info = getimagesize($file_path);
+$img_info = $file_path !== '' && file_exists($file_path) ? getimagesize($file_path) : false;
+
+if ($img_info !== false) {
 	header('Content-type: ' . $img_info['mime']);
 	readfile($file_path);
 } else {

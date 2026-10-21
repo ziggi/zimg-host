@@ -53,16 +53,18 @@ class Upload {
 	 * @return void
 	 */
 	public function upload_urls(array $urls_array) {
+		$urls_array = array_values($urls_array);
 		$files_count = count($urls_array);
 
 		$array_result = array();
 
 		for ($i = 0; $i < $files_count; $i++) {
 			$is_blacklisted = false;
+			$url = is_string($urls_array[$i]) ? $urls_array[$i] : '';
 
 			// check domain
 			foreach ($this->_blacklisted_domains as $domain_name) {
-				if (strpos($urls_array[$i], $domain_name) !== false) {
+				if (strpos($url, $domain_name) !== false) {
 					$is_blacklisted = true;
 					$array_result[$i]['error']['host'] = 1;
 					break;
@@ -70,11 +72,11 @@ class Upload {
 			}
 
 			// copy file to temp dir
-			$temp_name = tempnam("/tmp", "zmg");
-			$is_copied = @copy($urls_array[$i], $temp_name);
+			$temp_name = tempnam(sys_get_temp_dir(), "zmg");
+			$is_copied = $url !== '' && @copy($url, $temp_name);
 
 			// upload
-			$this->upload_handling($array_result[$i], $urls_array[$i], $temp_name, !$is_copied | $is_blacklisted);
+			$this->upload_handling($array_result[$i], $url, $temp_name, (int)(!$is_copied || $is_blacklisted));
 		}
 
 		echo json_encode($array_result);
@@ -88,7 +90,11 @@ class Upload {
 	 * @return void
 	 */
 	public function upload_files(array $files_array) {
-		$files_count = count($files_array['name']);
+		if (!isset($files_array['name'])) {
+			return;
+		}
+
+		$files_count = is_array($files_array['name']) ? count($files_array['name']) : 1;
 		$files = $this->restruct_input_array($files_array, $files_count);
 
 		$array_result = array();
@@ -122,7 +128,7 @@ class Upload {
 		} else {
 			$array['name'] = $name;
 			// get size and type
-			list($width, $height, $type) = getimagesize($temp_name);
+			list($width, $height, $type) = getimagesize($temp_name) ?: array(0, 0, IMAGETYPE_UNKNOWN);
 			$array['type'] = $type;
 			$array['size']['width'] = $width;
 			$array['size']['height'] = $height;
@@ -202,9 +208,6 @@ class Upload {
 
 		$create_function = "image" . $this->_allowed_types[$type]['function_postfix'];
 		$create_function($dest_res, $dest_path);
-
-		imagedestroy($dest_res);
-		imagedestroy($src_res);
 	}
 
 	/**
@@ -253,7 +256,7 @@ class Upload {
 	 * @return bool
 	 */
 	public function is_support_type($type) {
-		if (!isset($this->_allowed_types[$type])) {
+		if (!is_int($type) || !isset($this->_allowed_types[$type])) {
 			return false;
 		}
 		return true;
@@ -292,8 +295,14 @@ class Upload {
 	 * @return int Bytes
 	 */
 	private function return_bytes($val) {
-		$val = trim($val);
+		$val = trim((string)$val);
+
+		if ($val === '') {
+			return 0;
+		}
+
 		$last = strtolower($val[ strlen($val) - 1 ]);
+		$val = (int)$val;
 
 		switch ($last) {
 			case 'g':
