@@ -1,10 +1,13 @@
 <?php
 
-$uri_parts = explode('/', $_SERVER['PHP_SELF'] ?? '');
-$uri_parts[1] = $uri_parts[1] ?? '';
+// folder of the running script relative to this file ('' for index.php, '/api' for api/*.php)
+$script_dir = realpath(dirname($_SERVER['SCRIPT_FILENAME'] ?? '')) ?: __DIR__;
+$script_subdir = str_replace('\\', '/', substr($script_dir, strlen(__DIR__)));
 
-if (is_file($uri_parts[1])) {
-	$uri_parts[1] = '';
+// site path in the url without the script subfolder and trailing slash ('' when installed in the web root)
+$base_path = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+if ($script_subdir !== '' && substr($base_path, -strlen($script_subdir)) === $script_subdir) {
+	$base_path = substr($base_path, 0, -strlen($script_subdir));
 }
 
 return array(
@@ -23,7 +26,7 @@ return array(
 	// template folder path
 	'tpl_path' => dirname(__FILE__) . '/tpl/' . $tpl . '/',
 	// uri addres to site
-	'uri' => '//' . preg_replace('#/$#', '', ($_SERVER['SERVER_NAME'] ?? '') . '/' . $uri_parts[1]),
+	'uri' => '//' . ($_SERVER['SERVER_NAME'] ?? '') . $base_path,
 	// params
-	'uri_param' => (string)preg_replace('#^' . dirname($_SERVER['PHP_SELF'] ?? '') . '/?#', '', $_SERVER['REQUEST_URI'] ?? '', 1),
+	'uri_param' => (string)preg_replace('#^' . preg_quote($base_path, '#') . '/?#', '', $_SERVER['REQUEST_URI'] ?? '', 1),
 );
