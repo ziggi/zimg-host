@@ -132,20 +132,20 @@ window.addEventListener('load', function() {
 	function getErrorMessage(error) {
 		var errorTypeText = 'Reason: ';
 
-		if (error.type == 1) {
-			errorTypeText += 'bad type, ';
+		if (error.type) {
+			errorTypeText += 'Bad type, ';
 		}
 
-		if (error.size == 1) {
-			errorTypeText += 'bad size, ';
+		if (error.size) {
+			errorTypeText += 'Bad size, ';
 		}
 
-		if (error.host == 1) {
-			errorTypeText += 'this host is blacklisted, ';
+		if (error.host) {
+			errorTypeText += 'This host is blacklisted, ';
 		}
 
 		if (error.type == 0 && error.size == 0 && error.host == 0) {
-			errorTypeText = 'server error, ';
+			errorTypeText = 'Server error, ';
 		}
 
 		errorTypeText = errorTypeText.slice(0, -2) + '.';
